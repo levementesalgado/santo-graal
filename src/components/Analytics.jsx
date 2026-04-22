@@ -9,6 +9,7 @@ import {
   Info,
   ArrowUpRight,
   ArrowDownRight,
+  Activity, // <- adicionado
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -27,8 +28,8 @@ export function MetricsCard({
 
   return (
     <motion.div
-      initial={{ opacity, y: 20 }}
-      animate={{ opacity, y: 0 }}
+      initial={{ opacity: 0, y: 20 }}  // opacity definido
+      animate={{ opacity: 1, y: 0 }}
       whileHover={{ y: -4 }}
       transition={{ duration: 0.3 }}
     >
@@ -63,22 +64,23 @@ export function MetricsCard({
   );
 }
 
-export function TrendIndicator({ trend }: { trend?: 'up' | 'down' | 'stable' }) {
+// Remove a anotação de tipo : { trend? ... } – JSX puro
+export function TrendIndicator({ trend }) {
   if (!trend) return null;
 
   const configs = {
     up: {
-      icon,
+      icon: TrendingUp,      // ícone importado
       color: 'text-emerald-500 bg-emerald-500/10',
       label: 'Crescente'
     },
     down: {
-      icon,
+      icon: TrendingDown,    // ícone importado
       color: 'text-rose-500 bg-rose-500/10',
       label: 'Decrescente'
     },
     stable: {
-      icon,
+      icon: Minus,           // ícone importado
       color: 'text-amber-500 bg-amber-500/10',
       label: 'Estável'
     }
@@ -95,11 +97,11 @@ export function TrendIndicator({ trend }: { trend?: 'up' | 'down' | 'stable' }) 
   );
 }
 
-export function AnomalyAlert({ data }: { data: ConabData }) {
+export function AnomalyAlert({ data }) {
   return (
     <motion.div
-      initial={{ opacity, scale: 0.95 }}
-      animate={{ opacity, scale: 1 }}
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
       className="p-4 rounded-xl border border-destructive/20 bg-destructive/5 flex gap-4 items-start"
     >
       <div className="p-2 rounded-full bg-destructive/10 text-destructive">
@@ -120,7 +122,7 @@ export function AnomalyAlert({ data }: { data: ConabData }) {
   );
 }
 
-export function RecommendationPanel({ title, recommendations }: { title, recommendations: string[] }) {
+export function RecommendationPanel({ title, recommendations }) {
   return (
     <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
       <CardHeader className="pb-3">
@@ -135,7 +137,7 @@ export function RecommendationPanel({ title, recommendations }: { title, recomme
           <motion.div
             key={idx}
             initial={{ x: -10, opacity: 0 }}
-            animate={{ x, opacity: 1 }}
+            animate={{ x: 0, opacity: 1 }}  // x definido
             transition={{ delay: idx * 0.1 }}
             className="flex gap-3 p-3 rounded-lg bg-card border border-border/40 items-start hover:border-primary/30 transition-colors"
           >
@@ -152,12 +154,7 @@ export function RecommendationPanel({ title, recommendations }: { title, recomme
   );
 }
 
-export function InsightCard({ title, description, technicalNote, icon: Icon = Info }: {
-  title,
-  description,
-  technicalNote,
-  icon?: React.ElementType
-}) {
+export function InsightCard({ title, description, technicalNote, icon: Icon = Info }) {
   return (
     <div className="p-5 rounded-2xl bg-muted/30 border border-border/60 hover:bg-muted/50 transition-all">
       <div className="flex gap-4">
