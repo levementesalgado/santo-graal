@@ -1,0 +1,326 @@
+{
+  "documents": [],
+  "tables_parsed": [
+    {
+      "original_name": "area_em_producao-producao_nacional",
+      "file_name": "area_em_producao-producao_nacional_parsed.md",
+      "file_path": "/workspace/conab_analytics_dashboard/uploaded_files/tables/area_em_producao-producao_nacional_parsed.md",
+      "file_type": "xls",
+      "category": "tables_parsed",
+      "summary": "Parsed content from area_em_producao-producao_nacional (may be incomplete)",
+      "source_id": "2025034996760104965",
+      "note": "Excel parsing is incomplete, use source file for complete analysis"
+    },
+    {
+      "original_name": "area_em_produção_por_uf_todos_os_estados",
+      "file_name": "area_em_produção_por_uf_todos_os_estados_parsed.md",
+      "file_path": "/workspace/conab_analytics_dashboard/uploaded_files/tables/area_em_produção_por_uf_todos_os_estados_parsed.md",
+      "file_type": "xls",
+      "category": "tables_parsed",
+      "summary": "Parsed content from area_em_produção_por_uf_todos_os_estados (may be incomplete)",
+      "source_id": "2025034996760104967",
+      "note": "Excel parsing is incomplete, use source file for complete analysis"
+    },
+    {
+      "original_name": "produção_por_uf_todos_os_estados",
+      "file_name": "produção_por_uf_todos_os_estados_parsed.md",
+      "file_path": "/workspace/conab_analytics_dashboard/uploaded_files/tables/produção_por_uf_todos_os_estados_parsed.md",
+      "file_type": "xls",
+      "category": "tables_parsed",
+      "summary": "Parsed content from produção_por_uf_todos_os_estados (may be incomplete)",
+      "source_id": "2025034996760104966",
+      "note": "Excel parsing is incomplete, use source file for complete analysis"
+    },
+    {
+      "original_name": "produtividade_por_uf_todos_os_estados",
+      "file_name": "produtividade_por_uf_todos_os_estados_parsed.md",
+      "file_path": "/workspace/conab_analytics_dashboard/uploaded_files/tables/produtividade_por_uf_todos_os_estados_parsed.md",
+      "file_type": "csv",
+      "category": "tables_parsed",
+      "summary": "Parsed content from produtividade_por_uf_todos_os_estados (may be incomplete)",
+      "source_id": "2025034996755910656",
+      "note": "Excel parsing is incomplete, use source file for complete analysis"
+    },
+    {
+      "original_name": "produtividade_por_uf_todos_os_estados",
+      "file_name": "produtividade_por_uf_todos_os_estados_parsed.md",
+      "file_path": "/workspace/conab_analytics_dashboard/uploaded_files/tables/produtividade_por_uf_todos_os_estados_parsed.md",
+      "file_type": "xls",
+      "category": "tables_parsed",
+      "summary": "Parsed content from produtividade_por_uf_todos_os_estados (may be incomplete)",
+      "source_id": "2025034996760104964",
+      "note": "Excel parsing is incomplete, use source file for complete analysis"
+    },
+    {
+      "original_name": "consolidado",
+      "file_name": "consolidado_parsed.md",
+      "file_path": "/workspace/conab_analytics_dashboard/uploaded_files/tables/consolidado_parsed.md",
+      "file_type": "csv",
+      "category": "tables_parsed",
+      "summary": "Parsed content from consolidado (may be incomplete)",
+      "source_id": "2025034996760104963",
+      "note": "Excel parsing is incomplete, use source file for complete analysis"
+    },
+    {
+      "original_name": "produtividade",
+      "file_name": "produtividade_parsed.md",
+      "file_path": "/workspace/conab_analytics_dashboard/uploaded_files/tables/produtividade_parsed.md",
+      "file_type": "csv",
+      "category": "tables_parsed",
+      "summary": "Parsed content from produtividade (may be incomplete)",
+      "source_id": "2025034996760104962",
+      "note": "Excel parsing is incomplete, use source file for complete analysis"
+    },
+    {
+      "original_name": "producao",
+      "file_name": "producao_parsed.md",
+      "file_path": "/workspace/conab_analytics_dashboard/uploaded_files/tables/producao_parsed.md",
+      "file_type": "csv",
+      "category": "tables_parsed",
+      "summary": "Parsed content from producao (may be incomplete)",
+      "source_id": "2025034996760104961",
+      "note": "Excel parsing is incomplete, use source file for complete analysis"
+    },
+    {
+      "original_name": "area_plantada",
+      "file_name": "area_plantada_parsed.md",
+      "file_path": "/workspace/conab_analytics_dashboard/uploaded_files/tables/area_plantada_parsed.md",
+      "file_type": "csv",
+      "category": "tables_parsed",
+      "summary": "Parsed content from area_plantada (may be incomplete)",
+      "source_id": "2025034996760104960",
+      "note": "Excel parsing is incomplete, use source file for complete analysis"
+    },
+    {
+      "original_name": "nacional_por_tipo",
+      "file_name": "nacional_por_tipo_parsed.md",
+      "file_path": "/workspace/conab_analytics_dashboard/uploaded_files/tables/nacional_por_tipo_parsed.md",
+      "file_type": "csv",
+      "category": "tables_parsed",
+      "summary": "Parsed content from nacional_por_tipo (may be incomplete)",
+      "source_id": "2025034996755910660",
+      "note": "Excel parsing is incomplete, use source file for complete analysis"
+    },
+    {
+      "original_name": "area_em_producao-producao_nacional",
+      "file_name": "area_em_producao-producao_nacional_parsed.md",
+      "file_path": "/workspace/conab_analytics_dashboard/uploaded_files/tables/area_em_producao-producao_nacional_parsed.md",
+      "file_type": "csv",
+      "category": "tables_parsed",
+      "summary": "Parsed content from area_em_producao-producao_nacional (may be incomplete)",
+      "source_id": "2025034996755910659",
+      "note": "Excel parsing is incomplete, use source file for complete analysis"
+    },
+    {
+      "original_name": "area_em_produção_por_uf_todos_os_estados",
+      "file_name": "area_em_produção_por_uf_todos_os_estados_parsed.md",
+      "file_path": "/workspace/conab_analytics_dashboard/uploaded_files/tables/area_em_produção_por_uf_todos_os_estados_parsed.md",
+      "file_type": "csv",
+      "category": "tables_parsed",
+      "summary": "Parsed content from area_em_produção_por_uf_todos_os_estados (may be incomplete)",
+      "source_id": "2025034996755910658",
+      "note": "Excel parsing is incomplete, use source file for complete analysis"
+    },
+    {
+      "original_name": "produção_por_uf_todos_os_estados",
+      "file_name": "produção_por_uf_todos_os_estados_parsed.md",
+      "file_path": "/workspace/conab_analytics_dashboard/uploaded_files/tables/produção_por_uf_todos_os_estados_parsed.md",
+      "file_type": "csv",
+      "category": "tables_parsed",
+      "summary": "Parsed content from produção_por_uf_todos_os_estados (may be incomplete)",
+      "source_id": "2025034996755910657",
+      "note": "Excel parsing is incomplete, use source file for complete analysis"
+    }
+  ],
+  "tables_source_info": [
+    {
+      "original_name": "area_em_producao-producao_nacional",
+      "file_name": "area_em_producao-producao_nacional_source_info.json",
+      "file_path": "/workspace/conab_analytics_dashboard/uploaded_files/source_files/area_em_producao-producao_nacional_source_info.json",
+      "file_type": "json",
+      "category": "tables_source_info",
+      "summary": "Source info for area_em_producao-producao_nacional",
+      "source_id": "2025034996760104965"
+    },
+    {
+      "original_name": "area_em_produção_por_uf_todos_os_estados",
+      "file_name": "area_em_produção_por_uf_todos_os_estados_source_info.json",
+      "file_path": "/workspace/conab_analytics_dashboard/uploaded_files/source_files/area_em_produção_por_uf_todos_os_estados_source_info.json",
+      "file_type": "json",
+      "category": "tables_source_info",
+      "summary": "Source info for area_em_produção_por_uf_todos_os_estados",
+      "source_id": "2025034996760104967"
+    },
+    {
+      "original_name": "produção_por_uf_todos_os_estados",
+      "file_name": "produção_por_uf_todos_os_estados_source_info.json",
+      "file_path": "/workspace/conab_analytics_dashboard/uploaded_files/source_files/produção_por_uf_todos_os_estados_source_info.json",
+      "file_type": "json",
+      "category": "tables_source_info",
+      "summary": "Source info for produção_por_uf_todos_os_estados",
+      "source_id": "2025034996760104966"
+    },
+    {
+      "original_name": "produtividade_por_uf_todos_os_estados",
+      "file_name": "produtividade_por_uf_todos_os_estados_source_info.json",
+      "file_path": "/workspace/conab_analytics_dashboard/uploaded_files/source_files/produtividade_por_uf_todos_os_estados_source_info.json",
+      "file_type": "json",
+      "category": "tables_source_info",
+      "summary": "Source info for produtividade_por_uf_todos_os_estados",
+      "source_id": "2025034996755910656"
+    },
+    {
+      "original_name": "produtividade_por_uf_todos_os_estados",
+      "file_name": "produtividade_por_uf_todos_os_estados_source_info.json",
+      "file_path": "/workspace/conab_analytics_dashboard/uploaded_files/source_files/produtividade_por_uf_todos_os_estados_source_info.json",
+      "file_type": "json",
+      "category": "tables_source_info",
+      "summary": "Source info for produtividade_por_uf_todos_os_estados",
+      "source_id": "2025034996760104964"
+    },
+    {
+      "original_name": "consolidado",
+      "file_name": "consolidado_source_info.json",
+      "file_path": "/workspace/conab_analytics_dashboard/uploaded_files/source_files/consolidado_source_info.json",
+      "file_type": "json",
+      "category": "tables_source_info",
+      "summary": "Source info for consolidado",
+      "source_id": "2025034996760104963"
+    },
+    {
+      "original_name": "produtividade",
+      "file_name": "produtividade_source_info.json",
+      "file_path": "/workspace/conab_analytics_dashboard/uploaded_files/source_files/produtividade_source_info.json",
+      "file_type": "json",
+      "category": "tables_source_info",
+      "summary": "Source info for produtividade",
+      "source_id": "2025034996760104962"
+    },
+    {
+      "original_name": "producao",
+      "file_name": "producao_source_info.json",
+      "file_path": "/workspace/conab_analytics_dashboard/uploaded_files/source_files/producao_source_info.json",
+      "file_type": "json",
+      "category": "tables_source_info",
+      "summary": "Source info for producao",
+      "source_id": "2025034996760104961"
+    },
+    {
+      "original_name": "area_plantada",
+      "file_name": "area_plantada_source_info.json",
+      "file_path": "/workspace/conab_analytics_dashboard/uploaded_files/source_files/area_plantada_source_info.json",
+      "file_type": "json",
+      "category": "tables_source_info",
+      "summary": "Source info for area_plantada",
+      "source_id": "2025034996760104960"
+    },
+    {
+      "original_name": "nacional_por_tipo",
+      "file_name": "nacional_por_tipo_source_info.json",
+      "file_path": "/workspace/conab_analytics_dashboard/uploaded_files/source_files/nacional_por_tipo_source_info.json",
+      "file_type": "json",
+      "category": "tables_source_info",
+      "summary": "Source info for nacional_por_tipo",
+      "source_id": "2025034996755910660"
+    },
+    {
+      "original_name": "area_em_producao-producao_nacional",
+      "file_name": "area_em_producao-producao_nacional_source_info.json",
+      "file_path": "/workspace/conab_analytics_dashboard/uploaded_files/source_files/area_em_producao-producao_nacional_source_info.json",
+      "file_type": "json",
+      "category": "tables_source_info",
+      "summary": "Source info for area_em_producao-producao_nacional",
+      "source_id": "2025034996755910659"
+    },
+    {
+      "original_name": "area_em_produção_por_uf_todos_os_estados",
+      "file_name": "area_em_produção_por_uf_todos_os_estados_source_info.json",
+      "file_path": "/workspace/conab_analytics_dashboard/uploaded_files/source_files/area_em_produção_por_uf_todos_os_estados_source_info.json",
+      "file_type": "json",
+      "category": "tables_source_info",
+      "summary": "Source info for area_em_produção_por_uf_todos_os_estados",
+      "source_id": "2025034996755910658"
+    },
+    {
+      "original_name": "produção_por_uf_todos_os_estados",
+      "file_name": "produção_por_uf_todos_os_estados_source_info.json",
+      "file_path": "/workspace/conab_analytics_dashboard/uploaded_files/source_files/produção_por_uf_todos_os_estados_source_info.json",
+      "file_type": "json",
+      "category": "tables_source_info",
+      "summary": "Source info for produção_por_uf_todos_os_estados",
+      "source_id": "2025034996755910657"
+    }
+  ],
+  "images": [
+    {
+      "original_name": "producao_evolucao_top5",
+      "file_name": "producao_evolucao_top5.png",
+      "file_path": "/workspace/conab_analytics_dashboard/public/images/producao_evolucao_top5.png",
+      "rel_path": "images/producao_evolucao_top5.png",
+      "file_type": "png",
+      "category": "images"
+    },
+    {
+      "original_name": "heatmap_eficiencia",
+      "file_name": "heatmap_eficiencia.png",
+      "file_path": "/workspace/conab_analytics_dashboard/public/images/heatmap_eficiencia.png",
+      "rel_path": "images/heatmap_eficiencia.png",
+      "file_type": "png",
+      "category": "images"
+    },
+    {
+      "original_name": "participacao_tipo",
+      "file_name": "participacao_tipo.png",
+      "file_path": "/workspace/conab_analytics_dashboard/public/images/participacao_tipo.png",
+      "rel_path": "images/participacao_tipo.png",
+      "file_type": "png",
+      "category": "images"
+    },
+    {
+      "original_name": "matriz_eficiencia",
+      "file_name": "matriz_eficiencia.png",
+      "file_path": "/workspace/conab_analytics_dashboard/public/images/matriz_eficiencia.png",
+      "rel_path": "images/matriz_eficiencia.png",
+      "file_type": "png",
+      "category": "images"
+    },
+    {
+      "original_name": "produtividade_media_uf",
+      "file_name": "produtividade_media_uf.png",
+      "file_path": "/workspace/conab_analytics_dashboard/public/images/produtividade_media_uf.png",
+      "rel_path": "images/produtividade_media_uf.png",
+      "file_type": "png",
+      "category": "images"
+    },
+    {
+      "original_name": "producao_total_uf",
+      "file_name": "producao_total_uf.png",
+      "file_path": "/workspace/conab_analytics_dashboard/public/images/producao_total_uf.png",
+      "rel_path": "images/producao_total_uf.png",
+      "file_type": "png",
+      "category": "images"
+    }
+  ],
+  "summary": {
+    "total_files": 33,
+    "by_category": {
+      "documents": 0,
+      "tables_parsed": 13,
+      "tables_source_info": 13,
+      "images": 6,
+      "document": 1
+    },
+    "processing_time": null
+  },
+  "document": [
+    {
+      "original_name": "Curriculo_Mateus_iuri",
+      "file_name": "Curriculo_Mateus_iuri.md",
+      "file_path": "/workspace/conab_analytics_dashboard/uploaded_files/documents/Curriculo_Mateus_iuri.md",
+      "file_type": "docx",
+      "category": "document",
+      "summary": "Processed Curriculo_Mateus_iuri for coding",
+      "source_id": "2025034996760104968"
+    }
+  ]
+}
