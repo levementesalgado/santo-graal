@@ -62,10 +62,13 @@ const Analytics = () => {
     latestData.reduce((acc, curr) => acc + curr.production, 0),
   [latestData]);
 
-  const avgNationalProductivity = useMemo(() =>
-    latestData.length > 0
-      ? latestData.reduce((acc, curr) => acc + curr.productivity, 0) / latestData.length);
-
+const avgNationalProductivity = useMemo(() =>
+  latestData.length > 0
+    ? latestData.reduce((acc, curr) => acc + curr.productivity, 0) / latestData.length
+    : 0,
+  [latestData]
+);
+  
   if (isLoading) {
     return (
       <div className="flex items-center justify-center gap-3 py-24 text-muted-foreground">
