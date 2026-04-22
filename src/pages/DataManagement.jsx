@@ -40,7 +40,8 @@ export default function DataManagement() {
     ? new Date(dataUpdatedAt).toLocaleString('pt-BR')
     : null;
 
-  const addLog = (msg, type: 'info' | 'error' | 'success' = 'info') => {
+  // CORRIGIDO: remove type annotation (TypeScript -> JavaScript puro)
+  const addLog = (msg, type = 'info') => {
     setDataLogs(prev => [{
       time: new Date().toLocaleTimeString(),
       msg,
@@ -55,7 +56,7 @@ export default function DataManagement() {
 
     try {
       const timer = setInterval(() => {
-        setProgress(prev => (prev < 85 ? prev + 5));
+        setProgress(prev => (prev < 85 ? prev + 5 : prev));
       }, 200);
 
       addLog("Conectando ao portal da CONAB...", "info");
@@ -163,8 +164,8 @@ export default function DataManagement() {
 
       {isSyncing && (
         <motion.div
-          initial={{ opacity, y: -10 }}
-          animate={{ opacity, y: 0 }}
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
           className="bg-card border border-primary/20 p-4 rounded-xl shadow-sm"
         >
           <div className="flex justify-between mb-2 text-sm font-medium">
@@ -284,8 +285,8 @@ export default function DataManagement() {
                   {dataLogs.map((log, i) => (
                     <motion.div
                       key={i}
-                      initial={{ opacity, x: -5 }}
-                      animate={{ opacity, x: 0 }}
+                      initial={{ opacity: 0, x: -5 }}
+                      animate={{ opacity: 1, x: 0 }}
                       className={`border-l-2 pl-2 ${log.type === 'error' ? 'border-destructive text-destructive' : log.type === 'success' ? 'border-primary text-primary' : 'border-muted-foreground/30 text-foreground/80'}`}
                     >
                       <span className="opacity-50 mr-2">[{log.time}]</span>
