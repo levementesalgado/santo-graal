@@ -1,43 +1,20 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import {
-  TrendingUp,
-  TrendingDown,
-  Minus,
-  AlertTriangle,
-  Lightbulb,
-  Info,
-  ArrowUpRight,
-  ArrowDownRight,
-  Activity, // <- adicionado
+  AlertTriangle, Lightbulb, Info,
+  ArrowUpRight, ArrowDownRight, Minus, Activity
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import { ConabData } from '@/lib/index';
 
-export function MetricsCard({
-  metric,
-  value,
-  trend,
-  recommendation,
-  unit = '',
-  subtitle
-}) {
+export function MetricsCard({ metric, value, trend, recommendation, unit = '', subtitle }) {
   const formattedValue = new Intl.NumberFormat('pt-BR').format(value);
-
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}  // opacity definido
-      animate={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -4 }}
-      transition={{ duration: 0.3 }}
-    >
+    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} whileHover={{ y: -4 }} transition={{ duration: 0.3 }}>
       <Card className="overflow-hidden border-border/50 bg-card/50 backdrop-blur-sm shadow-sm hover:shadow-md transition-all">
         <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
-          <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
-            {metric}
-          </CardTitle>
+          <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider">{metric}</CardTitle>
           <TrendIndicator trend={trend} />
         </CardHeader>
         <CardContent>
@@ -46,15 +23,11 @@ export function MetricsCard({
               {formattedValue}
               <span className="text-lg ml-1 font-normal text-muted-foreground">{unit}</span>
             </div>
-            {subtitle && (
-              <p className="text-xs text-muted-foreground font-medium">{subtitle}</p>
-            )}
+            {subtitle && <p className="text-xs text-muted-foreground font-medium">{subtitle}</p>}
             {recommendation && (
               <div className="mt-4 p-3 rounded-lg bg-primary/5 border border-primary/10 flex gap-2 items-start">
                 <Lightbulb className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-                <p className="text-xs text-primary-foreground/80 leading-relaxed font-medium">
-                  {recommendation}
-                </p>
+                <p className="text-xs text-primary-foreground/80 leading-relaxed font-medium">{recommendation}</p>
               </div>
             )}
           </div>
@@ -64,31 +37,15 @@ export function MetricsCard({
   );
 }
 
-// Remove a anotação de tipo : { trend? ... } – JSX puro
 export function TrendIndicator({ trend }) {
   if (!trend) return null;
-
   const configs = {
-    up: {
-      icon: TrendingUp,      // ícone importado
-      color: 'text-emerald-500 bg-emerald-500/10',
-      label: 'Crescente'
-    },
-    down: {
-      icon: TrendingDown,    // ícone importado
-      color: 'text-rose-500 bg-rose-500/10',
-      label: 'Decrescente'
-    },
-    stable: {
-      icon: Minus,           // ícone importado
-      color: 'text-amber-500 bg-amber-500/10',
-      label: 'Estável'
-    }
+    up:     { icon: ArrowUpRight,   color: 'text-emerald-500 bg-emerald-500/10', label: 'Crescente'   },
+    down:   { icon: ArrowDownRight, color: 'text-rose-500 bg-rose-500/10',       label: 'Decrescente' },
+    stable: { icon: Minus,          color: 'text-amber-500 bg-amber-500/10',     label: 'Estável'     },
   };
-
   const config = configs[trend];
   const Icon = config.icon;
-
   return (
     <Badge variant="outline" className={cn("px-2 py-0.5 flex items-center gap-1 border-none font-semibold", config.color)}>
       <Icon className="w-3.5 h-3.5" />
@@ -99,11 +56,8 @@ export function TrendIndicator({ trend }) {
 
 export function AnomalyAlert({ data }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      className="p-4 rounded-xl border border-destructive/20 bg-destructive/5 flex gap-4 items-start"
-    >
+    <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
+      className="p-4 rounded-xl border border-destructive/20 bg-destructive/5 flex gap-4 items-start">
       <div className="p-2 rounded-full bg-destructive/10 text-destructive">
         <AlertTriangle className="w-5 h-5" />
       </div>
@@ -134,19 +88,12 @@ export function RecommendationPanel({ title, recommendations }) {
       </CardHeader>
       <CardContent className="grid gap-3">
         {recommendations.map((rec, idx) => (
-          <motion.div
-            key={idx}
-            initial={{ x: -10, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}  // x definido
-            transition={{ delay: idx * 0.1 }}
-            className="flex gap-3 p-3 rounded-lg bg-card border border-border/40 items-start hover:border-primary/30 transition-colors"
-          >
+          <motion.div key={idx} initial={{ x: -10, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: idx * 0.1 }}
+            className="flex gap-3 p-3 rounded-lg bg-card border border-border/40 items-start hover:border-primary/30 transition-colors">
             <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
               <span className="text-[10px] font-bold text-primary">{idx + 1}</span>
             </div>
-            <p className="text-sm leading-snug text-foreground/90">
-              {rec}
-            </p>
+            <p className="text-sm leading-snug text-foreground/90">{rec}</p>
           </motion.div>
         ))}
       </CardContent>
@@ -163,9 +110,7 @@ export function InsightCard({ title, description, technicalNote, icon: Icon = In
         </div>
         <div className="flex-1 space-y-2">
           <h3 className="font-bold text-base tracking-tight">{title}</h3>
-          <p className="text-sm text-muted-foreground leading-relaxed">
-            {description}
-          </p>
+          <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
           {technicalNote && (
             <div className="pt-2 border-t border-border/40">
               <p className="text-[11px] font-mono text-muted-foreground/80 leading-tight italic">

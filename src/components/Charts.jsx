@@ -18,7 +18,6 @@ import {
   ZAxis,
 } from 'recharts';
 import { motion } from 'framer-motion';
-import { ConabData, PredictionModel } from '@/lib/index';
 import { runPredictiveModel, calculateEfficiencyMatrix } from '@/lib/analytics';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { springPresets } from '@/lib/motion';
@@ -76,7 +75,7 @@ export function TimeSeriesChart({ data, selectedState }) {
       </CardHeader>
       <CardContent className="h-[300px] w-full pt-4">
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={chartData} margin={{ top, right, left, bottom: 5 }}>
+          <LineChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
             <XAxis
               dataKey="year"
@@ -98,8 +97,8 @@ export function TimeSeriesChart({ data, selectedState }) {
                 dataKey={state}
                 stroke={CHART_COLORS[idx % CHART_COLORS.length]}
                 strokeWidth={3}
-                dot={{ r, strokeWidth, fill: 'var(--card)' }}
-                activeDot={{ r, strokeWidth: 0 }}
+                dot={{ r: 4, strokeWidth: 2, fill: 'var(--card)' }}
+                activeDot={{ r: 6, strokeWidth: 0 }}
                 animationDuration={1500}
               />
             ))}
@@ -127,7 +126,7 @@ export function EfficiencyHeatmap({ data }) {
 
   const years = Array.from(new Set(data.map(d => d.year))).sort().slice(-6);
 
-  const getColor = (value) => {
+  const getColor = (value: number) => {
     if (value === 0) return 'transparent';
     const intensity = Math.min(Math.max(value / 3500, 0.1), 1);
     return `oklch(0.62 ${0.17 * intensity} 163 / ${0.3 + intensity * 0.7})`;
@@ -153,8 +152,8 @@ export function EfficiencyHeatmap({ data }) {
               {years.map(year => (
                 <motion.div
                   key={year}
-                  initial={{ opacity, scale: 0.9 }}
-                  animate={{ opacity, scale: 1 }}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
                   transition={{ ...springPresets.snappy, delay: i * 0.05 }}
                   className="flex-1 h-8 m-1 rounded-md flex items-center justify-center text-[10px] font-mono font-medium transition-transform hover:scale-110 cursor-pointer"
                   style={{ backgroundColor: getColor(row[`y${year}`]), color: row[`y${year}`] > 2000 ? 'white' : 'var(--foreground)' }}
@@ -194,7 +193,7 @@ export function RegionalBarChart({ data, selectedYear = 2026 }) {
               type="category"
               axisLine={false}
               tickLine={false}
-              tick={{ fill: 'var(--foreground)', fontSize, fontWeight: 600 }}
+              tick={{ fill: 'var(--foreground)', fontSize: 12, fontWeight: 600 }}
             />
             <Tooltip content={<CustomTooltip />} />
             <Bar
@@ -217,10 +216,10 @@ export function RegionalBarChart({ data, selectedYear = 2026 }) {
 export function ProductivityScatter({ data }) {
   const chartData = useMemo(() => {
     return data.filter(d => d.year === 2026).map(d => ({
-      x,
-      y,
-      z,
-      name,
+      x: d.area,
+      y: d.productivity,
+      z: d.production,
+      name: d.state,
       region: d.region
     }));
   }, [data]);
@@ -233,7 +232,7 @@ export function ProductivityScatter({ data }) {
       </CardHeader>
       <CardContent className="h-[350px] w-full pt-4">
         <ResponsiveContainer width="100%" height="100%">
-          <ScatterChart margin={{ top, right, bottom, left: 20 }}>
+          <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
             <XAxis
               type="number"
@@ -242,7 +241,7 @@ export function ProductivityScatter({ data }) {
               unit=" mil ha"
               axisLine={false}
               tickLine={false}
-              label={{ value, position, offset: -10, fill: 'var(--muted-foreground)' }}
+              label={{ value: 'Área Plantada', position: 'insideBottom', offset: -10, fill: 'var(--muted-foreground)' }}
             />
             <YAxis
               type="number"
@@ -251,7 +250,7 @@ export function ProductivityScatter({ data }) {
               unit=" kg/ha"
               axisLine={false}
               tickLine={false}
-              label={{ value, angle: -90, position, fill: 'var(--muted-foreground)' }}
+              label={{ value: 'Produtividade', angle: -90, position: 'insideLeft', fill: 'var(--muted-foreground)' }}
             />
             <ZAxis type="number" dataKey="z" range={[100, 3000]} name="Produção" />
             <Tooltip cursor={{ strokeDasharray: '3 3' }} content={<CustomTooltip />} />
@@ -279,16 +278,16 @@ export function PredictionChart({ data, selectedState = 'MG' }) {
 
   const chartData = useMemo(() => {
     const historical = stateData.map(d => ({
-      year,
-      production,
+      year: d.year,
+      production: d.production,
       type: 'Histórico'
     }));
 
     const predicted = predictions.map(p => ({
-      year,
-      production,
-      lower,
-      upper,
+      year: p.targetYear,
+      production: p.predictedValue,
+      lower: p.lowerBound,
+      upper: p.upperBound,
       type: 'Projeção'
     }));
 
@@ -317,7 +316,7 @@ export function PredictionChart({ data, selectedState = 'MG' }) {
       </CardHeader>
       <CardContent className="h-[400px] w-full">
         <ResponsiveContainer width="100%" height="100%">
-          <ComposedChart data={chartData} margin={{ top, right, left, bottom: 0 }}>
+          <ComposedChart data={chartData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
             <XAxis dataKey="year" axisLine={false} tickLine={false} tick={{ fill: 'var(--muted-foreground)' }} />
             <YAxis axisLine={false} tickLine={false} tick={{ fill: 'var(--muted-foreground)' }} />
@@ -343,7 +342,7 @@ export function PredictionChart({ data, selectedState = 'MG' }) {
               dataKey="production"
               stroke="var(--primary)"
               strokeWidth={4}
-              dot={{ r, fill: 'var(--card)', strokeWidth: 2 }}
+              dot={{ r: 5, fill: 'var(--card)', strokeWidth: 2 }}
               animationDuration={2500}
             />
             <Line
@@ -352,7 +351,7 @@ export function PredictionChart({ data, selectedState = 'MG' }) {
               stroke="var(--accent)"
               strokeWidth={2}
               strokeDasharray="5 5"
-              dot={{ r, fill: 'var(--accent)', strokeWidth: 0 }}
+              dot={{ r: 4, fill: 'var(--accent)', strokeWidth: 0 }}
               data={chartData.filter(d => d.type === 'Projeção')}
             />
           </ComposedChart>

@@ -13,7 +13,6 @@ import {
   Loader2
 } from 'lucide-react';
 import {
-  ConabData,
 } from '@/lib/index';
 import {
   runPredictiveModel,
@@ -25,12 +24,13 @@ import {
   MetricsCard,
   InsightCard,
   RecommendationPanel,
+  AnomalyAlert
 } from '@/components/Analytics';
 import { useAllConabData, useStateConabData, useAvailableStates } from '@/hooks/useConabData';
 
 const springTransition = {
-  type,
-  stiffness,
+  type: "spring",
+  stiffness: 300,
   damping: 30
 };
 
@@ -134,7 +134,7 @@ export default function Predictions() {
       </header>
 
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <motion.div initial={{ opacity, y: 20 }} animate={{ opacity, y: 0 }} transition={{ ...springTransition, delay: 0.1 }}>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ ...springTransition, delay: 0.1 }}>
           <MetricsCard
             metric={`Produção Estimada ${latestYear + 1}`}
             value={firstPrediction?.predictedValue || 0}
@@ -144,7 +144,7 @@ export default function Predictions() {
           />
         </motion.div>
 
-        <motion.div initial={{ opacity, y: 20 }} animate={{ opacity, y: 0 }} transition={{ ...springTransition, delay: 0.2 }}>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ ...springTransition, delay: 0.2 }}>
           <MetricsCard
             metric="Confiança do Modelo"
             value={(firstPrediction?.confidenceScore || 0) * 100}
@@ -154,7 +154,7 @@ export default function Predictions() {
           />
         </motion.div>
 
-        <motion.div initial={{ opacity, y: 20 }} animate={{ opacity, y: 0 }} transition={{ ...springTransition, delay: 0.3 }}>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ ...springTransition, delay: 0.3 }}>
           <MetricsCard
             metric="Volatilidade Histórica"
             value={trends.volatility}
@@ -164,9 +164,9 @@ export default function Predictions() {
           />
         </motion.div>
 
-        <motion.div initial={{ opacity, y: 20 }} animate={{ opacity, y: 0 }} transition={{ ...springTransition, delay: 0.4 }}>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ ...springTransition, delay: 0.4 }}>
           <MetricsCard
-            metric="Anomalias Detectadas"
+            metric="Anomali"
             value={anomalies.length}
             unit="eventos"
             trend={anomalies.length > 2 ? 'up' : 'stable'}
@@ -178,8 +178,8 @@ export default function Predictions() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <motion.div
           className="lg:col-span-2 bg-card rounded-3xl border border-border shadow-sm overflow-hidden flex flex-col"
-          initial={{ opacity, scale: 0.95 }}
-          animate={{ opacity, scale: 1 }}
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
           transition={springTransition}
         >
           <div className="p-6 border-b border-border flex items-center justify-between bg-muted/30">
@@ -204,8 +204,8 @@ export default function Predictions() {
 
         <motion.div
           className="space-y-6"
-          initial={{ opacity, x: 20 }}
-          animate={{ opacity, x: 0 }}
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
           transition={springTransition}
         >
           <div className="bg-secondary/10 rounded-3xl p-6 border border-secondary/20 space-y-4">

@@ -40,8 +40,7 @@ export default function DataManagement() {
     ? new Date(dataUpdatedAt).toLocaleString('pt-BR')
     : null;
 
-  // CORRIGIDO: remove type annotation (TypeScript -> JavaScript puro)
-  const addLog = (msg, type = 'info') => {
+  const addLog = (msg: string, type = 'info') => {
     setDataLogs(prev => [{
       time: new Date().toLocaleTimeString(),
       msg,
@@ -82,7 +81,7 @@ export default function DataManagement() {
       setProgress(100);
 
       addLog(`Sincronização concluída: ${count} registros persistidos no Supabase.`, "success");
-      toast.success(`Base de dados atualizada ${count} registros sincronizados.`);
+      toast.success(`Base de dados atualizada! ${count} registros sincronizados.`);
 
       queryClient.invalidateQueries({ queryKey: ['conab'] });
 
@@ -111,7 +110,7 @@ export default function DataManagement() {
     link.click();
     document.body.removeChild(link);
     addLog("Exportação de dados (CSV) gerada com sucesso.", "success");
-    toast.success("CSV exportado");
+    toast.success("CSV exportado!");
   };
 
   useEffect(() => {
@@ -230,20 +229,20 @@ export default function DataManagement() {
                     <Card className="border-dashed">
                       <CardHeader className="pb-2">
                         <CardTitle className="text-sm flex items-center gap-2 text-primary">
-                          <CheckCircle2 className="h-4 w-4" /> Regras Passadas
+                          <CheckCircle2 className="h-4 w-4" /> Regr
                         </CardTitle>
                       </CardHeader>
                       <CardContent className="text-xs space-y-2">
                         <div className="flex justify-between"><span>Valores Negativos</span> <Badge variant="outline" className="text-green-600">Zero Ocorrências</Badge></div>
                         <div className="flex justify-between"><span>Unidades (kg/ha)</span> <Badge variant="outline" className="text-green-600">Normalizado</Badge></div>
-                        <div className="flex justify-between"><span>Fronteiras Temporais</span> <Badge variant="outline" className="text-green-600">Válido</Badge></div>
+                        <div className="flex justify-between"><span>Fronteir</span> <Badge variant="outline" className="text-green-600">Válido</Badge></div>
                       </CardContent>
                     </Card>
 
                     <Card className="border-dashed">
                       <CardHeader className="pb-2">
                         <CardTitle className="text-sm flex items-center gap-2 text-amber-500">
-                          <AlertTriangle className="h-4 w-4" /> Anomalias Detectadas
+                          <AlertTriangle className="h-4 w-4" /> Anomali
                         </CardTitle>
                       </CardHeader>
                       <CardContent className="text-xs space-y-2">

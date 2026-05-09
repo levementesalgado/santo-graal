@@ -12,14 +12,13 @@ import {
   Loader2
 } from 'lucide-react';
 import {
-} from '@/lib/index';
-import {
   calculateEfficiencyMatrix,
   generateRegionalRecommendations
 } from '@/lib/analytics';
 import {
   RegionalBarChart,
   ProductivityScatter,
+  EfficiencyHeatmap
 } from '@/components/Charts';
 import { MetricsTable } from '@/components/DataTable';
 import { IMAGES } from '@/assets/images';
@@ -29,8 +28,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAllConabData } from '@/hooks/useConabData';
 
 const springProps = {
-  type,
-  stiffness,
+  type: "spring",
+  stiffness: 300,
   damping: 30
 };
 
@@ -73,8 +72,8 @@ export default function Regional() {
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <motion.h1
-            initial={{ opacity, x: -20 }}
-            animate={{ opacity, x: 0 }}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
             className="text-3xl font-bold tracking-tight text-foreground"
           >
             Análise Regional de Performance
@@ -107,8 +106,8 @@ export default function Regional() {
             <motion.div
               key={item.state}
               layout
-              initial={{ opacity, y: 20 }}
-              animate={{ opacity, y: 0 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.1, ...springProps }}
             >
               <Card
@@ -199,9 +198,9 @@ export default function Regional() {
             {activeStateData ? (
               <motion.div
                 key={activeStateData.state}
-                initial={{ opacity, scale: 0.95 }}
-                animate={{ opacity, scale: 1 }}
-                exit={{ opacity, scale: 0.95 }}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
                 className="space-y-6"
               >
                 <Card className="p-6 bg-primary/5 border-primary/20">
@@ -229,8 +228,8 @@ export default function Regional() {
                       {recommendations.map((rec, i) => (
                         <motion.div
                           key={i}
-                          initial={{ x, opacity: 0 }}
-                          animate={{ x, opacity: 1 }}
+                          initial={{ x: 20, opacity: 0 }}
+                          animate={{ x: 0, opacity: 1 }}
                           transition={{ delay: i * 0.1 }}
                           className="text-xs p-3 bg-background rounded-lg border-l-4 border-primary shadow-sm leading-relaxed"
                         >
