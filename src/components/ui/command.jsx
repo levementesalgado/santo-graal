@@ -1,4 +1,4 @@
-import *{ } from "@radix-ui/react-dialog"
+import { } from "@radix-ui/react-dialog"
 import { Command} from "cmdk"
 import { Search } from "lucide-react"
 
