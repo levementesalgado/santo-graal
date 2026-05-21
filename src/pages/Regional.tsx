@@ -26,34 +26,35 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAllConabData } from '@/hooks/useConabData';
+import type { ConabRecord, EfficiencyEntry } from '@/types';
 
 const springProps = {
-  type: "spring",
+  type: "spring" as const,
   stiffness: 300,
   damping: 30
 };
 
 export default function Regional() {
-  const [selectedRegion, setSelectedRegion] = useState('TODAS');
-  const [selectedState, setSelectedState] = useState(null);
+  const [selectedRegion, setSelectedRegion] = useState<string>('TODAS');
+  const [selectedState, setSelectedState] = useState<string | null>(null);
 
-  const { data: allData = [], isLoading } = useAllConabData();
+  const { data: allData = [] as ConabRecord[], isLoading } = useAllConabData();
 
-  const efficiencyMatrix = useMemo(() => calculateEfficiencyMatrix(allData), [allData]);
+  const efficiencyMatrix: EfficiencyEntry[] = useMemo(() => calculateEfficiencyMatrix(allData), [allData]);
 
-  const regions = ['TODAS', 'NORTE', 'NORDESTE', 'CENTRO-OESTE', 'SUDESTE', 'SUL'];
+  const regions: string[] = ['TODAS', 'NORTE', 'NORDESTE', 'CENTRO-OESTE', 'SUDESTE', 'SUL'];
 
-  const filteredMatrix = useMemo(() => {
+  const filteredMatrix: EfficiencyEntry[] = useMemo(() => {
     if (selectedRegion === 'TODAS') return efficiencyMatrix;
-    return efficiencyMatrix.filter(item => item.region === selectedRegion);
+    return efficiencyMatrix.filter((item: EfficiencyEntry) => item.region === selectedRegion);
   }, [selectedRegion, efficiencyMatrix]);
 
-  const activeStateData = useMemo(() => {
-    if (!selectedState) return null;
-    return efficiencyMatrix.find(s => s.state === selectedState);
+  const activeStateData: EfficiencyEntry | undefined = useMemo(() => {
+    if (!selectedState) return undefined;
+    return efficiencyMatrix.find((s: EfficiencyEntry) => s.state === selectedState);
   }, [selectedState, efficiencyMatrix]);
 
-  const recommendations = useMemo(() => {
+  const recommendations: string[] = useMemo(() => {
     if (!selectedState) return [];
     return generateRegionalRecommendations(selectedState, allData);
   }, [selectedState, allData]);
