@@ -27,46 +27,47 @@ import {
   AnomalyAlert
 } from '@/components/Analytics';
 import { useAllConabData, useStateConabData, useAvailableStates } from '@/hooks/useConabData';
+import type { ConabRecord, Prediction, SeasonalTrend } from '@/types';
 
 const springTransition = {
-  type: "spring",
+  type: "spring" as const,
   stiffness: 300,
   damping: 30
 };
 
 export default function Predictions() {
-  const [selectedCrop, setSelectedCrop] = useState('Café Arábica');
-  const [selectedState, setSelectedState] = useState('MG');
-  const [horizon, setHorizon] = useState(3);
+  const [selectedCrop, setSelectedCrop] = useState<string>('Café Arábica');
+  const [selectedState, setSelectedState] = useState<string>('MG');
+  const [horizon, setHorizon] = useState<number>(3);
 
-  const { data: allData = [], isLoading: isLoadingAll } = useAllConabData();
-  const { data: stateData = [], isLoading: isLoadingState } = useStateConabData(selectedState);
-  const { data: availableStates = [] } = useAvailableStates();
+  const { data: allData = [] as ConabRecord[], isLoading: isLoadingAll } = useAllConabData();
+  const { data: stateData = [] as ConabRecord[], isLoading: isLoadingState } = useStateConabData(selectedState);
+  const { data: availableStates = [] as string[] } = useAvailableStates();
 
   const isLoading = isLoadingAll || isLoadingState;
 
-  const cropFilteredData = useMemo(() => {
-    const base = stateData.filter(d => d.crop === selectedCrop);
+  const cropFilteredData: ConabRecord[] = useMemo(() => {
+    const base = stateData.filter((d: ConabRecord) => d.crop === selectedCrop);
 
     return base.length > 0 ? base : stateData;
   }, [stateData, selectedCrop]);
 
-  const sortedData = useMemo(() =>
-    [...cropFilteredData].sort((a, b) => a.year - b.year),
+  const sortedData: ConabRecord[] = useMemo(() =>
+    [...cropFilteredData].sort((a: ConabRecord, b: ConabRecord) => a.year - b.year),
   [cropFilteredData]);
 
-  const availableCrops = useMemo(() =>
-    Array.from(new Set(allData.map(d => d.crop))).sort(),
+  const availableCrops: string[] = useMemo(() =>
+    Array.from(new Set(allData.map((d: ConabRecord) => d.crop))).sort(),
   [allData]);
 
-  const predictions = useMemo(() => runPredictiveModel(sortedData, horizon), [sortedData, horizon]);
-  const trends = useMemo(() => analyzeSeasonalTrends(sortedData), [sortedData]);
-  const anomalies = useMemo(() => detectAnomalies(sortedData), [sortedData]);
+  const predictions: Prediction[] = useMemo(() => runPredictiveModel(sortedData, horizon), [sortedData, horizon]);
+  const trends: SeasonalTrend = useMemo(() => analyzeSeasonalTrends(sortedData), [sortedData]);
+  const anomalies: ConabRecord[] = useMemo(() => detectAnomalies(sortedData), [sortedData]);
 
   const lastPrediction = predictions[predictions.length - 1];
   const firstPrediction = predictions[0];
 
-  const latestYear = useMemo(() => Math.max(...allData.map(d => d.year), 2026), [allData]);
+  const latestYear = useMemo(() => Math.max(...allData.map((d: ConabRecord) => d.year), 2026), [allData]);
 
   if (isLoading) {
     return (
