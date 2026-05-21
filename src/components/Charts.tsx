@@ -18,6 +18,7 @@ import {
   ZAxis,
 } from 'recharts';
 import { motion } from 'framer-motion';
+import type { ConabRecord } from '@/types';
 import { runPredictiveModel, calculateEfficiencyMatrix } from '@/lib/analytics';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { springPresets } from '@/lib/motion';
@@ -30,7 +31,18 @@ const CHART_COLORS = [
   'var(--chart-5)',
 ];
 
-const CustomTooltip = ({ active, payload, label }) => {
+interface CustomTooltipProps {
+  active?: boolean;
+  payload?: Array<{
+    value?: number;
+    name?: string;
+    color?: string;
+    dataKey?: string | number;
+  }>;
+  label?: string | number;
+}
+
+const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
   if (active && payload && payload.length) {
     return (
       <div className="bg-card/90 backdrop-blur-md border border-border p-3 rounded-lg shadow-xl">
@@ -48,20 +60,27 @@ const CustomTooltip = ({ active, payload, label }) => {
   return null;
 };
 
-export function TimeSeriesChart({ data, selectedState }) {
+interface TimeSeriesChartProps {
+  data: ConabRecord[];
+  selectedState?: string;
+  selectedYear?: number;
+}
+
+export function TimeSeriesChart({ data, selectedState, selectedYear }: TimeSeriesChartProps) {
   const chartData = useMemo(() => {
-    const years = Array.from(new Set(data.map(d => d.year))).sort();
+    const filtered = selectedYear ? data.filter(d => d.year === selectedYear) : data;
+    const years = Array.from(new Set(filtered.map(d => d.year))).sort();
     const states = selectedState ? [selectedState] : Array.from(new Set(data.map(d => d.state))).slice(0, 5);
 
     return years.map(year => {
-      const entry = { year };
+      const entry: Record<string, number | string> = { year };
       states.forEach(state => {
-        const record = data.find(d => d.year === year && d.state === state);
+        const record = filtered.find(d => d.year === year && d.state === state);
         if (record) entry[state] = record.production;
       });
       return entry;
     });
-  }, [data, selectedState]);
+  }, [data, selectedState, selectedYear]);
 
   const states = selectedState ? [selectedState] : Array.from(new Set(data.map(d => d.state))).slice(0, 5);
 
@@ -109,13 +128,17 @@ export function TimeSeriesChart({ data, selectedState }) {
   );
 }
 
-export function EfficiencyHeatmap({ data }) {
+interface EfficiencyHeatmapProps {
+  data: ConabRecord[];
+}
+
+export function EfficiencyHeatmap({ data }: EfficiencyHeatmapProps) {
   const heatmapData = useMemo(() => {
     const states = Array.from(new Set(data.map(d => d.state))).sort();
     const years = Array.from(new Set(data.map(d => d.year))).sort().slice(-6);
 
     return states.map(state => {
-      const row = { state };
+      const row: Record<string, string | number> = { state };
       years.forEach(year => {
         const record = data.find(d => d.year === year && d.state === state);
         row[`y${year}`] = record ? record.productivity : 0;
@@ -147,8 +170,8 @@ export function EfficiencyHeatmap({ data }) {
             ))}
           </div>
           {heatmapData.map((row, i) => (
-            <div key={row.state} className="flex h-10 items-center border-b border-border/20 last:border-0">
-              <div className="w-24 text-sm font-bold text-foreground">{row.state}</div>
+            <div key={row.state as string} className="flex h-10 items-center border-b border-border/20 last:border-0">
+              <div className="w-24 text-sm font-bold text-foreground">{row.state as string}</div>
               {years.map(year => (
                 <motion.div
                   key={year}
@@ -156,10 +179,10 @@ export function EfficiencyHeatmap({ data }) {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ ...springPresets.snappy, delay: i * 0.05 }}
                   className="flex-1 h-8 m-1 rounded-md flex items-center justify-center text-[10px] font-mono font-medium transition-transform hover:scale-110 cursor-pointer"
-                  style={{ backgroundColor: getColor(row[`y${year}`]), color: row[`y${year}`] > 2000 ? 'white' : 'var(--foreground)' }}
-                  title={`${row.state} - ${year}: ${row[`y${year}`].toFixed(0)} kg/ha`}
+                  style={{ backgroundColor: getColor(row[`y${year}`] as number), color: (row[`y${year}`] as number) > 2000 ? 'white' : 'var(--foreground)' }}
+                  title={`${row.state} - ${year}: ${(row[`y${year}`] as number).toFixed(0)} kg/ha`}
                 >
-                  {row[`y${year}`] > 0 ? Math.round(row[`y${year}`]) : '-'}
+                  {(row[`y${year}`] as number) > 0 ? Math.round(row[`y${year}`] as number) : '-'}
                 </motion.div>
               ))}
             </div>
@@ -170,7 +193,12 @@ export function EfficiencyHeatmap({ data }) {
   );
 }
 
-export function RegionalBarChart({ data, selectedYear = 2026 }) {
+interface RegionalBarChartProps {
+  data: ConabRecord[];
+  selectedYear?: number;
+}
+
+export function RegionalBarChart({ data, selectedYear = 2026 }: RegionalBarChartProps) {
   const chartData = useMemo(() => {
     return data
       .filter(d => d.year === selectedYear)
@@ -213,7 +241,11 @@ export function RegionalBarChart({ data, selectedYear = 2026 }) {
   );
 }
 
-export function ProductivityScatter({ data }) {
+interface ProductivityScatterProps {
+  data: ConabRecord[];
+}
+
+export function ProductivityScatter({ data }: ProductivityScatterProps) {
   const chartData = useMemo(() => {
     return data.filter(d => d.year === 2026).map(d => ({
       x: d.area,
@@ -272,7 +304,13 @@ export function ProductivityScatter({ data }) {
   );
 }
 
-export function PredictionChart({ data, selectedState = 'MG' }) {
+interface PredictionChartProps {
+  data: ConabRecord[];
+  selectedState?: string;
+  showPredictions?: boolean;
+}
+
+export function PredictionChart({ data, selectedState = 'MG' }: PredictionChartProps) {
   const stateData = useMemo(() => data.filter(d => d.state === selectedState), [data, selectedState]);
   const predictions = useMemo(() => runPredictiveModel(stateData, 4), [stateData]);
 
