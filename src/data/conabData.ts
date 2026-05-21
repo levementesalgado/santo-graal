@@ -1,6 +1,8 @@
+import type { ConabRecord } from "@/types";
+
 const CURRENT_TS = new Date().toISOString();
 
-export const conabHistoricalData = [
+export const conabHistoricalData: ConabRecord[] = [
   { id: 'mg-2018', year: 2018, state: 'MG', region: 'SUDESTE', crop: 'Café Arábica', production: 33400, productivity: 1810, area: 1108, timestamp: CURRENT_TS },
   { id: 'mg-2019', year: 2019, state: 'MG', region: 'SUDESTE', crop: 'Café Arábica', production: 24500, productivity: 1330, area: 1105, timestamp: CURRENT_TS },
   { id: 'mg-2020', year: 2020, state: 'MG', region: 'SUDESTE', crop: 'Café Arábica', production: 34650, productivity: 1880, area: 1105, timestamp: CURRENT_TS },
@@ -40,13 +42,13 @@ export const conabHistoricalData = [
   { id: 'mt-2026', year: 2026, state: 'MT', region: 'CENTRO-OESTE', crop: 'Café Robusta', production: 180, productivity: 1320, area: 8, timestamp: CURRENT_TS },
 ];
 
-export const stateData = conabHistoricalData.reduce((acc, curr) => {
+export const stateData = conabHistoricalData.reduce<Record<string, ConabRecord[]>>((acc, curr) => {
   if (!acc[curr.state]) acc[curr.state] = [];
   acc[curr.state].push(curr);
   return acc;
 }, {});
 
-export const cropData = conabHistoricalData.reduce((acc, curr) => {
+export const cropData = conabHistoricalData.reduce<Record<string, ConabRecord[]>>((acc, curr) => {
   if (!acc[curr.crop]) acc[curr.crop] = [];
   acc[curr.crop].push(curr);
   return acc;
