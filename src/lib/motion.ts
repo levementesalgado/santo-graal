@@ -6,7 +6,7 @@ export const springPresets = {
   inertia: { type: "spring", stiffness: 150, damping: 20, mass: 0.5 },
 }
 
-export const appleEase = {
+export const appleEase: Record<string, number[]> = {
   standard: [0.25, 0.1, 0.25, 1.0],
   out: [0.22, 1, 0.36, 1],
   decelerate: [0, 0, 0.2, 1],
