@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { GripVertical } from "lucide-react"
 import *-resizable-panels"
 
