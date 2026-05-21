@@ -5,15 +5,16 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Download, Search, ArrowUpDown, TrendingUp, TrendingDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import type { ConabRecord } from '@/types';
 import { springPresets } from "@/lib/motion";
 
-const COLUMN_LABELS = {
+const COLUMN_LABELS: Record<string, string> = {
   year: "Safra", state: "UF", region: "Região", crop: "Cultura",
   production: "Produção (Mil Sacas)", productivity: "Produtividade (kg/ha)",
   area: "Área (Mil ha)", timestamp: "Sincronização"
 };
 
-const regionColors = {
+const regionColors: Record<string, string> = {
   'SUDESTE':      'bg-chart-1/10 text-chart-1 border-chart-1/20',
   'NORTE':        'bg-chart-4/10 text-chart-4 border-chart-4/20',
   'NORDESTE':     'bg-chart-3/10 text-chart-3 border-chart-3/20',
@@ -21,23 +22,35 @@ const regionColors = {
   'SUL':          'bg-chart-5/10 text-chart-5 border-chart-5/20',
 };
 
-function renderCellContent(col, value) {
+function renderCellContent(col: string, value: unknown) {
   if (col === 'region')
-    return <Badge variant="outline" className={`rounded-md font-sans font-medium ${regionColors[value] || ''}`}>{value}</Badge>;
+    return <Badge variant="outline" className={`rounded-md font-sans font-medium ${regionColors[value as string] || ''}`}>{value as string}</Badge>;
   if (col === 'production' || col === 'productivity' || col === 'area')
-    return new Intl.NumberFormat('pt-BR').format(value);
+    return new Intl.NumberFormat('pt-BR').format(value as number);
   if (col === 'timestamp')
-    return new Date(value).toLocaleDateString('pt-BR');
-  return value;
+    return new Date(value as string).toLocaleDateString('pt-BR');
+  return value as string | number;
 }
 
-export function DataTable({ data, columns, filterable = true, exportable = true }) {
+interface DataTableProps {
+  data: ConabRecord[];
+  columns: string[];
+  filterable?: boolean;
+  exportable?: boolean;
+}
+
+interface SortConfig {
+  key: string;
+  direction: 'asc' | 'desc';
+}
+
+export function DataTable({ data, columns, filterable = true, exportable = true }: DataTableProps) {
   const [search, setSearch] = useState("");
-  const [sortConfig, setSortConfig] = useState(null);
+  const [sortConfig, setSortConfig] = useState<SortConfig | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 10;
 
-  const handleSort = (key) => {
+  const handleSort = (key: string) => {
     setSortConfig(prev =>
       prev?.key === key && prev.direction === 'asc'
         ? { key, direction: 'desc' }
@@ -58,7 +71,8 @@ export function DataTable({ data, columns, filterable = true, exportable = true 
     }
     if (sortConfig) {
       result.sort((a, b) => {
-        const av = a[sortConfig.key], bv = b[sortConfig.key];
+        const av = a[sortConfig.key as keyof ConabRecord];
+        const bv = b[sortConfig.key as keyof ConabRecord];
         if (av < bv) return sortConfig.direction === 'asc' ? -1 : 1;
         if (av > bv) return sortConfig.direction === 'asc' ? 1 : -1;
         return 0;
@@ -72,7 +86,7 @@ export function DataTable({ data, columns, filterable = true, exportable = true 
 
   const exportToCSV = () => {
     const headers = columns.map(c => COLUMN_LABELS[c] || c).join(",");
-    const rows = filteredData.map(item => columns.map(c => item[c]).join(",")).join("\n");
+    const rows = filteredData.map(item => columns.map(c => String(item[c as keyof ConabRecord])).join(",")).join("\n");
     const link = document.createElement("a");
     link.setAttribute("href", "data:text/csv;charset=utf-8," + encodeURI(headers + "\n" + rows));
     link.setAttribute("download", `conab_data_${new Date().toISOString().split('T')[0]}.csv`);
@@ -117,7 +131,7 @@ export function DataTable({ data, columns, filterable = true, exportable = true 
                   className="group border-border hover:bg-muted/30 transition-colors">
                   {columns.map(col => (
                     <TableCell key={`${item.id}-${col}`} className="py-4 font-mono text-sm">
-                      {renderCellContent(col, item[col])}
+                      {renderCellContent(col, item[col as keyof ConabRecord])}
                     </TableCell>
                   ))}
                 </motion.tr>
@@ -144,19 +158,23 @@ export function DataTable({ data, columns, filterable = true, exportable = true 
   );
 }
 
-export function MetricsTable({ data }) {
+interface MetricsTableProps {
+  data: ConabRecord[];
+}
+
+export function MetricsTable({ data }: MetricsTableProps) {
   const metrics = useMemo(() => {
     const by = data.reduce((acc, curr) => {
-      if (!acc[curr.state]) acc[curr.state] = { prod: [], yield: [] };
+      if (!acc[curr.state]) acc[curr.state] = { prod: [] as number[], yield: [] as number[] };
       acc[curr.state].prod.push(curr.production);
       acc[curr.state].yield.push(curr.productivity);
       return acc;
-    }, {});
+    }, {} as Record<string, { prod: number[]; yield: number[] }>);
     return Object.entries(by).map(([state, v]) => ({
       state,
       avgProd: v.prod.reduce((a, b) => a + b, 0) / v.prod.length,
       avgYield: v.yield.reduce((a, b) => a + b, 0) / v.yield.length,
-      trend: v.yield.at(-1) > v.yield.at(-2) ? 'up' : 'down',
+      trend: v.yield.at(-1)! > v.yield.at(-2)! ? 'up' : 'down' as const,
     }));
   }, [data]);
 
@@ -190,7 +208,13 @@ export function MetricsTable({ data }) {
   );
 }
 
-export function ComparisonTable({ data, states, years }) {
+interface ComparisonTableProps {
+  data: ConabRecord[];
+  states: string[];
+  years: number[];
+}
+
+export function ComparisonTable({ data, states, years }: ComparisonTableProps) {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
