@@ -7,27 +7,26 @@ import { MetricsCard, AnomalyAlert, InsightCard, RecommendationPanel } from '@/c
 import { FilterPanel } from '@/components/Filters';
 import { Link } from 'react-router-dom';
 import { useAllConabData, useFilteredConabData, useAvailableYears, useAvailableStates } from '@/hooks/useConabData';
+import type { ConabRecord, ConabFilters } from '@/types';
 
 const Dashboard = () => {
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<ConabFilters>({
     years: [], states: [], crops: [], metric: 'production', minProductivity: 0, comparisonMode: false,
   });
 
-  const { data: allData = [], isLoading: isLoadingAll } = useAllConabData();
-  const { data: filteredData = [], isLoading: isLoadingFiltered } = useFilteredConabData({
-    years: filters.years, states: filters.states, crops: filters.crops,
-  });
-  const { data: availableYears = [] } = useAvailableYears();
-  const { data: availableStates = [] } = useAvailableStates();
+  const { data: allData = [] as ConabRecord[], isLoading: isLoadingAll } = useAllConabData();
+  const { data: filteredData = [] as ConabRecord[], isLoading: isLoadingFiltered } = useFilteredConabData(filters);
+  const { data: availableYears = [] as number[] } = useAvailableYears();
+  const { data: availableStates = [] as string[] } = useAvailableStates();
 
   const isLoading = isLoadingAll || isLoadingFiltered;
-  const activeData = (filters.years.length === 0 && filters.states.length === 0 && filters.crops.length === 0) ? allData : filteredData;
+  const activeData: ConabRecord[] = (filters.years.length === 0 && filters.states.length === 0 && filters.crops.length === 0) ? allData : filteredData;
 
   const stats = useMemo(() => {
-    const totalProduction = activeData.reduce((acc, curr) => acc + curr.production, 0);
-    const avgProductivity = activeData.length > 0 ? activeData.reduce((acc, curr) => acc + curr.productivity, 0) / activeData.length : 0;
-    const totalArea = activeData.reduce((acc, curr) => acc + curr.area, 0);
-    const stateTotals = activeData.reduce((acc, curr) => { acc[curr.state] = (acc[curr.state] || 0) + curr.production; return acc; }, {});
+    const totalProduction = activeData.reduce((acc: number, curr: ConabRecord) => acc + curr.production, 0);
+    const avgProductivity = activeData.length > 0 ? activeData.reduce((acc: number, curr: ConabRecord) => acc + curr.productivity, 0) / activeData.length : 0;
+    const totalArea = activeData.reduce((acc: number, curr: ConabRecord) => acc + curr.area, 0);
+    const stateTotals = activeData.reduce((acc: Record<string, number>, curr: ConabRecord) => { acc[curr.state] = (acc[curr.state] || 0) + curr.production; return acc; }, {} as Record<string, number>);
     const leader = Object.entries(stateTotals).sort((a, b) => b[1] - a[1])[0]?.[0] || 'N/A';
     const lastSync = activeData[0]?.timestamp ? new Date(activeData[0].timestamp).toLocaleString('pt-BR') : '—';
     return { totalProduction, avgProductivity, totalArea, leader, lastSync };
