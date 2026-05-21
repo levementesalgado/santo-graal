@@ -21,18 +21,24 @@ import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import { DataTable } from "@/components/DataTable";
 import { syncAllCrops, validateDataIntegrity } from "@/lib/webScraper";
-import { ConabData } from "@/lib/index";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAllConabData, useSyncConabData, QUERY_KEYS } from "@/hooks/useConabData";
 import { useQueryClient } from '@tanstack/react-query';
+import type { ConabRecord, ValidationReport } from '@/types';
+
+interface DataLog {
+  time: string;
+  msg: string;
+  type: string;
+}
 
 export default function DataManagement() {
-  const [isSyncing, setIsSyncing] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [dataLogs, setDataLogs] = useState([]);
-  const [validationReport, setValidationReport] = useState(null);
+  const [isSyncing, setIsSyncing] = useState<boolean>(false);
+  const [progress, setProgress] = useState<number>(0);
+  const [dataLogs, setDataLogs] = useState<DataLog[]>([]);
+  const [validationReport, setValidationReport] = useState<ValidationReport | null>(null);
 
-  const { data: liveData = [], isLoading, dataUpdatedAt } = useAllConabData();
+  const { data: liveData = [] as ConabRecord[], isLoading, dataUpdatedAt } = useAllConabData();
   const { mutateAsync: syncToSupabase } = useSyncConabData();
   const queryClient = useQueryClient();
 
