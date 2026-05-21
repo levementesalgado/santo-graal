@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { Filter, X, Calendar, MapPin, TrendingUp, Check } from 'lucide-react';
 import { motion } from 'framer-motion';
+import type { ConabFilters } from '@/types';
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -12,8 +13,14 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
-export function FilterPanel({ onFilterChange, availableYears, availableStates }) {
-  const [filters, setFilters] = useState({
+interface FilterPanelProps {
+  onFilterChange: (filters: ConabFilters) => void;
+  availableYears: number[];
+  availableStates: string[];
+}
+
+export function FilterPanel({ onFilterChange, availableYears, availableStates }: FilterPanelProps) {
+  const [filters, setFilters] = useState<ConabFilters>({
     years: [2026],
     states: availableStates.slice(0, 5),
     crops: ['Café Arábica', 'Café Conillon'],
@@ -22,14 +29,14 @@ export function FilterPanel({ onFilterChange, availableYears, availableStates })
     comparisonMode: false,
   });
 
-  const handleUpdate = useCallback((updates) => {
+  const handleUpdate = useCallback((updates: Partial<ConabFilters>) => {
     const newFilters = { ...filters, ...updates };
     setFilters(newFilters);
     onFilterChange(newFilters);
   }, [filters, onFilterChange]);
 
   const resetFilters = () => {
-    const reset = {
+    const reset: ConabFilters = {
       years: [2026], states: availableStates.slice(0, 5),
       crops: ['Café Arábica', 'Café Conillon'],
       metric: 'production', minProductivity: 0, comparisonMode: false,
@@ -104,7 +111,13 @@ export function FilterPanel({ onFilterChange, availableYears, availableStates })
   );
 }
 
-export function YearSelector({ years, selected, onChange }) {
+interface YearSelectorProps {
+  years: number[];
+  selected: number[];
+  onChange: (years: number[]) => void;
+}
+
+export function YearSelector({ years, selected, onChange }: YearSelectorProps) {
   return (
     <div className="grid grid-cols-3 gap-1.5">
       {[...years].sort((a, b) => b - a).map(year => (
@@ -120,7 +133,13 @@ export function YearSelector({ years, selected, onChange }) {
   );
 }
 
-export function StateSelector({ states, selected, onChange }) {
+interface StateSelectorProps {
+  states: string[];
+  selected: string[];
+  onChange: (states: string[]) => void;
+}
+
+export function StateSelector({ states, selected, onChange }: StateSelectorProps) {
   return (
     <div className="space-y-1">
       <div className="flex flex-wrap gap-1.5 mb-2">
@@ -146,7 +165,12 @@ export function StateSelector({ states, selected, onChange }) {
   );
 }
 
-export function MetricSelector({ current, onChange }) {
+interface MetricSelectorProps {
+  current: string;
+  onChange: (metric: string) => void;
+}
+
+export function MetricSelector({ current, onChange }: MetricSelectorProps) {
   const metrics = [
     { id: 'production',   label: 'Produção Total', desc: 'Mil sacas de 60kg' },
     { id: 'productivity', label: 'Produtividade',  desc: 'kg por hectare'    },
@@ -172,7 +196,12 @@ export function MetricSelector({ current, onChange }) {
   );
 }
 
-export function RangeFilter({ value, onChange }) {
+interface RangeFilterProps {
+  value: number;
+  onChange: (value: number) => void;
+}
+
+export function RangeFilter({ value, onChange }: RangeFilterProps) {
   return (
     <div className="space-y-4 pt-2">
       <div className="flex items-center justify-between">
