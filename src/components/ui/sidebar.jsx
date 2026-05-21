@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Slot } from "@radix-ui/react-slot"
 import { VariantProps, cva } from "class-variance-authority"
 import { PanelLeft } from "lucide-react"
@@ -42,9 +43,7 @@ function useSidebar() {
   return context
 }
 
-const SidebarProvider = React.forwardRef(open) => void
-  }
->(
+const SidebarProvider = React.forwardRef(
   (
     {
       defaultOpen = true,

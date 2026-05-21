@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { cva } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
@@ -21,8 +22,6 @@ const badgeVariants = cva(
     },
   }
 )
-
-export 
 
 function Badge({ className, variant, ...props }) {
   return (
