@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { cn } from "@/lib/utils"
 
 // Format: { THEME_NAME: CSS_SELECTOR }
@@ -83,8 +84,7 @@ ${colorConfig
 
 const ChartTooltip = RechartsPrimitive.Tooltip
 
-    
->(
+const ChartTooltipContent = React.forwardRef(
   (
     {
       active,
@@ -229,11 +229,7 @@ ChartTooltipContent.displayName = "ChartTooltip"
 
 const ChartLegend = RechartsPrimitive.Legend
 
-    Pick<RechartsPrimitive.LegendProps, "payload" | "verticalAlign"> & {
-      hideIcon?: boolean
-      nameKey?: string
-    }
->(
+const ChartLegendContent = React.forwardRef(
   (
     { className, hideIcon = false, payload, verticalAlign = "bottom", nameKey },
     ref
