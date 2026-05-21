@@ -7,31 +7,32 @@ import {
   fetchAvailableStates,
   upsertConabData,
 } from '@/api/supabase';
+import type { ConabRecord, ConabFilters } from '@/types';
 
 export const QUERY_KEYS = {
-  allData: ['conab', 'all'],
-  filtered: (filters) => ['conab', 'filtered', filters],
-  byState: (state) => ['conab', 'state', state],
-  years: ['conab', 'years'],
-  states: ['conab', 'states'],
+  allData: ['conab', 'all'] as const,
+  filtered: (filters: ConabFilters) => ['conab', 'filtered', filters] as const,
+  byState: (state: string) => ['conab', 'state', state] as const,
+  years: ['conab', 'years'] as const,
+  states: ['conab', 'states'] as const,
 };
 
 export const useAllConabData = () =>
-  useQuery({
+  useQuery<ConabRecord[]>({
     queryKey: QUERY_KEYS.allData,
     queryFn: fetchAllConabData,
     staleTime: 1000 * 60 * 10,
   });
 
-export const useFilteredConabData = (filters) =>
-  useQuery({
+export const useFilteredConabData = (filters: ConabFilters) =>
+  useQuery<ConabRecord[]>({
     queryKey: QUERY_KEYS.filtered(filters),
     queryFn: () => fetchFilteredData(filters),
     staleTime: 1000 * 60 * 5,
   });
 
-export const useStateConabData = (state) =>
-  useQuery({
+export const useStateConabData = (state: string) =>
+  useQuery<ConabRecord[]>({
     queryKey: QUERY_KEYS.byState(state),
     queryFn: () => fetchDataByState(state),
     enabled: !!state,
@@ -39,14 +40,14 @@ export const useStateConabData = (state) =>
   });
 
 export const useAvailableYears = () =>
-  useQuery({
+  useQuery<number[]>({
     queryKey: QUERY_KEYS.years,
     queryFn: fetchAvailableYears,
     staleTime: 1000 * 60 * 30,
   });
 
 export const useAvailableStates = () =>
-  useQuery({
+  useQuery<string[]>({
     queryKey: QUERY_KEYS.states,
     queryFn: fetchAvailableStates,
     staleTime: 1000 * 60 * 30,
@@ -54,7 +55,7 @@ export const useAvailableStates = () =>
 
 export const useSyncConabData = () => {
   const queryClient = useQueryClient();
-  return useMutation({
+  return useMutation<number, Error, ConabRecord[]>({
     mutationFn: (records) => upsertConabData(records),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['conab'] });
