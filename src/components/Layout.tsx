@@ -11,7 +11,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-const NAV_ITEMS = [
+interface NavItem {
+  path: string;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+}
+
+const NAV_ITEMS: NavItem[] = [
   { path: ROUTE_PATHS.DASHBOARD,       label: 'Visão Geral',       icon: LayoutDashboard },
   { path: ROUTE_PATHS.ANALYTICS,       label: 'Análise Avançada',  icon: BarChart3       },
   { path: ROUTE_PATHS.REGIONAL,        label: 'Análise Regional',  icon: Map             },
@@ -19,10 +25,14 @@ const NAV_ITEMS = [
   { path: ROUTE_PATHS.DATA_MANAGEMENT, label: 'Gestão de Dados',   icon: Database        },
 ];
 
-export function Layout({ children }) {
+interface LayoutProps {
+  children: React.ReactNode;
+}
+
+export function Layout({ children }: LayoutProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [headerHeight, setHeaderHeight] = useState(0);
-  const headerRef = useRef(null);
+  const headerRef = useRef<HTMLHeadElement>(null);
   const location = useLocation();
 
   useEffect(() => {
@@ -51,7 +61,7 @@ export function Layout({ children }) {
         <nav className="flex-1 px-4 py-4 space-y-1.5">
           {NAV_ITEMS.map(item => (
             <NavLink key={item.path} to={item.path}
-              className={({ isActive }) => cn(
+              className={({ isActive }: { isActive: boolean }) => cn(
                 "flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200",
                 isActive
                   ? "bg-primary text-primary-foreground shadow-md shadow-primary/10"
@@ -167,7 +177,7 @@ export function Layout({ children }) {
               <nav className="flex-1 space-y-2">
                 {NAV_ITEMS.map(item => (
                   <NavLink key={item.path} to={item.path}
-                    className={({ isActive }) => cn("flex items-center gap-3 px-4 py-4 rounded-2xl transition-all",
+                    className={({ isActive }: { isActive: boolean }) => cn("flex items-center gap-3 px-4 py-4 rounded-2xl transition-all",
                       isActive ? "bg-primary text-primary-foreground" : "text-sidebar-foreground hover:bg-sidebar-accent")}>
                     <item.icon className="w-6 h-6" /><span className="font-semibold">{item.label}</span>
                   </NavLink>
