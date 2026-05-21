@@ -4,11 +4,24 @@ import {
   AlertTriangle, Lightbulb, Info,
   ArrowUpRight, ArrowDownRight, Minus, Activity
 } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
+import type { ConabRecord } from '@/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
-export function MetricsCard({ metric, value, trend, recommendation, unit = '', subtitle }) {
+type Trend = 'up' | 'down' | 'stable' | null | undefined;
+
+interface MetricsCardProps {
+  metric: string;
+  value: number;
+  trend?: Trend;
+  recommendation?: string;
+  unit?: string;
+  subtitle?: string;
+}
+
+export function MetricsCard({ metric, value, trend, recommendation, unit = '', subtitle }: MetricsCardProps) {
   const formattedValue = new Intl.NumberFormat('pt-BR').format(value);
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} whileHover={{ y: -4 }} transition={{ duration: 0.3 }}>
@@ -37,7 +50,11 @@ export function MetricsCard({ metric, value, trend, recommendation, unit = '', s
   );
 }
 
-export function TrendIndicator({ trend }) {
+interface TrendIndicatorProps {
+  trend?: Trend;
+}
+
+export function TrendIndicator({ trend }: TrendIndicatorProps) {
   if (!trend) return null;
   const configs = {
     up:     { icon: ArrowUpRight,   color: 'text-emerald-500 bg-emerald-500/10', label: 'Crescente'   },
@@ -54,7 +71,11 @@ export function TrendIndicator({ trend }) {
   );
 }
 
-export function AnomalyAlert({ data }) {
+interface AnomalyAlertProps {
+  data: ConabRecord;
+}
+
+export function AnomalyAlert({ data }: AnomalyAlertProps) {
   return (
     <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
       className="p-4 rounded-xl border border-destructive/20 bg-destructive/5 flex gap-4 items-start">
@@ -76,7 +97,12 @@ export function AnomalyAlert({ data }) {
   );
 }
 
-export function RecommendationPanel({ title, recommendations }) {
+interface RecommendationPanelProps {
+  title: string;
+  recommendations: string[];
+}
+
+export function RecommendationPanel({ title, recommendations }: RecommendationPanelProps) {
   return (
     <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
       <CardHeader className="pb-3">
@@ -101,7 +127,14 @@ export function RecommendationPanel({ title, recommendations }) {
   );
 }
 
-export function InsightCard({ title, description, technicalNote, icon: Icon = Info }) {
+interface InsightCardProps {
+  title: string;
+  description: string;
+  technicalNote?: string;
+  icon?: LucideIcon;
+}
+
+export function InsightCard({ title, description, technicalNote, icon: Icon = Info }: InsightCardProps) {
   return (
     <div className="p-5 rounded-2xl bg-muted/30 border border-border/60 hover:bg-muted/50 transition-all">
       <div className="flex gap-4">
