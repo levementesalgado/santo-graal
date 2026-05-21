@@ -6,9 +6,11 @@ import * as RRD from "react-router-dom-original";
 // @ts-expect-error - This is resolved at runtime by Vite alias
 export * from "react-router-dom-original";
 
+declare const __ROUTE_MESSAGING_ENABLED__: boolean;
+
 let routesPosted = false;
 
-let resolveRoutesReady = null;
+let resolveRoutesReady: ((value: unknown) => void) | null = null;
 const routesReadyPromise = new Promise((res) => {
   resolveRoutesReady = res;
 });
@@ -16,36 +18,39 @@ const routesReadyPromise = new Promise((res) => {
 const routesReadyOrTimeout = (ms = 1200) =>
   Promise.race([routesReadyPromise, new Promise((r) => setTimeout(r, ms))]);
 
-function normalize(p) {
+function normalize(p: string) {
   return p.replace(/\/+/g, "/");
 }
 
-function join(base, child) {
+function join(base: string, child: string) {
   if (!child) return base || "";
   if (child.startsWith("/")) return child;
   return normalize(`${base.replace(/\/$/, "")}/${child}`);
 }
 
-function flattenRoutes(node, base = "", acc = new Set()) {
+function flattenRoutes(node: React.ReactNode, base = "", acc = new Set<string>()): Set<string> {
   React.Children.forEach(node, (child) => {
     if (!React.isValidElement(child)) return;
     const isRoute =
       child.type === RRD.Route ||
       (typeof child.type === "function" && child.type.name === "Route");
     if (isRoute) {
-      const { path, index, children } = child.props ?? {};
+      const props = child.props as Record<string, unknown>;
+      const path = props.path as string | undefined;
+      const index = props.index as boolean | undefined;
+      const children = props.children as React.ReactNode;
       const cur = index ? (base || "/") : path ? join(base, path) : base;
       if (index || path) acc.add(cur || "/");
       if (children) flattenRoutes(children, cur, acc);
     } else {
-      const kids = child.props?.children;
+      const kids = (child.props as Record<string, unknown>)?.children as React.ReactNode | undefined;
       if (kids) flattenRoutes(kids, base, acc);
     }
   });
   return acc;
 }
 
-function postAllRoutesOnce(children) {
+function postAllRoutesOnce(children: React.ReactNode) {
   if (routesPosted) return;
   try {
     const list = Array.from(flattenRoutes(children)).sort();
@@ -58,19 +63,19 @@ function postAllRoutesOnce(children) {
     }
   } finally {
     routesPosted = true;
-    resolveRoutesReady?.();
+    resolveRoutesReady?.(null);
     resolveRoutesReady = null;
   }
 }
 
-export function Routes(props) {
+export function Routes(props: { children?: React.ReactNode }) {
   React.useEffect(() => { postAllRoutesOnce(props.children); }, []);
   return React.createElement(RRD.Routes, { ...props });
 }
 
 let lastEmittedPath = "";
 
-function emitRouteChange(location) {
+function emitRouteChange(location: { pathname: string; search: string; hash: string }) {
   const path = `${location.pathname}${location.search}${location.hash}`;
   if (path === lastEmittedPath) return;
   lastEmittedPath = path;
@@ -103,7 +108,7 @@ function RouterBridge() {
   }, [location.key, location.pathname, location.search, location.hash]);
 
   React.useEffect(() => {
-    function onMessage(e) {
+    function onMessage(e: MessageEvent) {
       const data = e.data;
       if (!data || !__ROUTE_MESSAGING_ENABLED__) return;
 
@@ -138,7 +143,7 @@ function RouterBridge() {
   return null;
 }
 
-function withBridge(children) {
+function withBridge(children: React.ReactNode) {
   return (
     <>
       {children}
@@ -147,14 +152,14 @@ function withBridge(children) {
   );
 }
 
-export function HashRouter(props) {
+export function HashRouter(props: { children?: React.ReactNode }) {
   return <RRD.HashRouter {...props}>{withBridge(props.children)}</RRD.HashRouter>;
 }
 
-export function BrowserRouter(props) {
+export function BrowserRouter(props: { children?: React.ReactNode }) {
   return <RRD.BrowserRouter {...props}>{withBridge(props.children)}</RRD.BrowserRouter>;
 }
 
-export function MemoryRouter(props) {
+export function MemoryRouter(props: { children?: React.ReactNode }) {
   return <RRD.MemoryRouter {...props}>{withBridge(props.children)}</RRD.MemoryRouter>;
 }
