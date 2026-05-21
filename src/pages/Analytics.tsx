@@ -6,23 +6,24 @@ import { MetricsCard, AnomalyAlert, RecommendationPanel, InsightCard } from '@/c
 import { runPredictiveModel, analyzeSeasonalTrends, detectAnomalies, generateRegionalRecommendations } from '@/lib/analytics';
 import { IMAGES } from '@/assets/images';
 import { useAllConabData, useStateConabData, useAvailableStates } from '@/hooks/useConabData';
+import type { ConabRecord, Prediction, SeasonalTrend } from '@/types';
 
 const Analytics = () => {
-  const [selectedState, setSelectedState] = useState('MG');
-  const { data: allData = [], isLoading: isLoadingAll } = useAllConabData();
-  const { data: stateData = [], isLoading: isLoadingState } = useStateConabData(selectedState);
-  const { data: availableStates = [] } = useAvailableStates();
+  const [selectedState, setSelectedState] = useState<string>('MG');
+  const { data: allData = [] as ConabRecord[], isLoading: isLoadingAll } = useAllConabData();
+  const { data: stateData = [] as ConabRecord[], isLoading: isLoadingState } = useStateConabData(selectedState);
+  const { data: availableStates = [] as string[] } = useAvailableStates();
   const isLoading = isLoadingAll || isLoadingState;
 
-  const latestYear = useMemo(() => Math.max(...allData.map(d => d.year), 0), [allData]);
-  const latestData = useMemo(() => allData.filter(d => d.year === latestYear), [allData, latestYear]);
-  const sortedStateData = useMemo(() => [...stateData].sort((a, b) => a.year - b.year), [stateData]);
-  const seasonalAnalysis = useMemo(() => analyzeSeasonalTrends(sortedStateData), [sortedStateData]);
-  const predictions = useMemo(() => runPredictiveModel(sortedStateData, 4), [sortedStateData]);
-  const anomalies = useMemo(() => detectAnomalies(sortedStateData), [sortedStateData]);
-  const regionalRecommendations = useMemo(() => generateRegionalRecommendations(selectedState, allData), [selectedState, allData]);
-  const totalNationalProduction = useMemo(() => latestData.reduce((acc, curr) => acc + curr.production, 0), [latestData]);
-  const avgNationalProductivity = useMemo(() => latestData.length > 0 ? latestData.reduce((acc, curr) => acc + curr.productivity, 0) / latestData.length : 0, [latestData]);
+  const latestYear = useMemo(() => Math.max(...allData.map((d: ConabRecord) => d.year), 0), [allData]);
+  const latestData = useMemo(() => allData.filter((d: ConabRecord) => d.year === latestYear), [allData, latestYear]);
+  const sortedStateData = useMemo(() => [...stateData].sort((a: ConabRecord, b: ConabRecord) => a.year - b.year), [stateData]);
+  const seasonalAnalysis: SeasonalTrend = useMemo(() => analyzeSeasonalTrends(sortedStateData), [sortedStateData]);
+  const predictions: Prediction[] = useMemo(() => runPredictiveModel(sortedStateData, 4), [sortedStateData]);
+  const anomalies: ConabRecord[] = useMemo(() => detectAnomalies(sortedStateData), [sortedStateData]);
+  const regionalRecommendations: string[] = useMemo(() => generateRegionalRecommendations(selectedState, allData), [selectedState, allData]);
+  const totalNationalProduction = useMemo(() => latestData.reduce((acc: number, curr: ConabRecord) => acc + curr.production, 0), [latestData]);
+  const avgNationalProductivity = useMemo(() => latestData.length > 0 ? latestData.reduce((acc: number, curr: ConabRecord) => acc + curr.productivity, 0) / latestData.length : 0, [latestData]);
 
   if (isLoading) return (
     <div className="flex items-center justify-center gap-3 py-24 text-muted-foreground">
@@ -120,7 +121,7 @@ const Analytics = () => {
             <div className="p-6 rounded-2xl bg-muted/50 border border-border">
               <h4 className="font-bold mb-4 flex items-center gap-2"><BarChart3 className="w-4 h-4" />Variações do Modelo</h4>
               <div className="space-y-4">
-                {predictions.map((p, i) => (
+                {predictions.map((p: Prediction, i: number) => (
                   <div key={i} className="flex items-center justify-between p-3 bg-card rounded-xl border border-border">
                     <span className="font-bold text-sm">{p.targetYear}</span>
                     <div className="text-right"><div className="text-sm font-mono">{p.predictedValue.toLocaleString('pt-BR')} sacas</div><div className="text-[10px] text-primary">Confiança: {(p.confidenceScore * 100).toFixed(0)}%</div></div>
@@ -130,7 +131,7 @@ const Analytics = () => {
             </div>
             <div className="bg-primary/5 p-6 rounded-2xl border border-primary/10">
               <p className="text-xs text-primary font-mono mb-2 tracking-tighter uppercase">Equation_Output.log</p>
-              <div className="space-y-1">{predictions[0]?.equations.map((eq, i) => <code key={i} className="block text-[11px] text-primary/80 font-mono">{eq}</code>)}</div>
+              <div className="space-y-1">{predictions[0]?.equations.map((eq: string, i: number) => <code key={i} className="block text-[11px] text-primary/80 font-mono">{eq}</code>)}</div>
             </div>
           </div>
         </div>
