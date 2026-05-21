@@ -1,4 +1,4 @@
-export const IMAGES = {
+export const IMAGES: Record<string, string> = {
   HEATMAP_EFICIENCIA_2: "/images/heatmap_eficiencia.png",
   HEATMAP_EFICIENCIA_8: "/images/heatmap_eficiencia.png",
   MATRIZ_EFICIENCIA_10: "/images/matriz_eficiencia.png",
