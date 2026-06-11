@@ -105,10 +105,10 @@ export default function DataManagement() {
   const handleExport = () => {
     const csvContent = "data:text/csv;charset=utf-8," +
       ["ID,Ano,Estado,Regiao,Cultura,Producao,Produtividade,Area"].concat(
-        liveData.map(d => `${d.id},${d.year},${d.state},${d.region},${d.crop},${d.production},${d.productivity},${d.area}`)
+        liveData.map(d => `"${d.id}","${d.year}","${d.state}","${d.region}","${d.crop}","${d.production}","${d.productivity}","${d.area}"`)
       ).join("\n");
 
-    const encodedUri = encodeURI(csvContent);
+    const encodedUri = encodeURIComponent(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
     link.setAttribute("download", `conab_export_${new Date().toISOString().slice(0,10)}.csv`);

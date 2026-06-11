@@ -59,7 +59,7 @@ function postAllRoutesOnce(children: React.ReactNode) {
 
     if (window.top && window.top !== window) {
       const routesForMessage = list.map(route => ({ path: route }));
-      window.top.postMessage({ type: "ROUTES_INFO", routes: routesForMessage, timestamp: Date.now() }, "*");
+      window.top.postMessage({ type: "ROUTES_INFO", routes: routesForMessage, timestamp: Date.now() }, window.location.origin);
     }
   } finally {
     routesPosted = true;
@@ -91,7 +91,7 @@ function emitRouteChange(location: { pathname: string; search: string; hash: str
       fullPath: location.pathname + location.search + location.hash,
       fullUrl: window.location.href,
       timestamp: Date.now(),
-    }, "*");
+    }, window.location.origin);
   }
 }
 
@@ -109,6 +109,7 @@ function RouterBridge() {
 
   React.useEffect(() => {
     function onMessage(e: MessageEvent) {
+      if (e.origin !== window.location.origin) return;
       const data = e.data;
       if (!data || !__ROUTE_MESSAGING_ENABLED__) return;
 
