@@ -1,36 +1,40 @@
 import type { ConabRecord, Prediction, EfficiencyEntry, SeasonalTrend } from '@/types'
-import { predictTrends } from './index'
+import { ensemblePredict } from './ml'
 
 export const runPredictiveModel = (data: ConabRecord[], horizon: number = 3): Prediction[] => {
-  const values = [...data].sort((a, b) => a.year - b.year).map(d => d.production)
+  const sorted = [...data].sort((a, b) => a.year - b.year)
+  const values = sorted.map(d => d.production)
   const years = data.map(d => d.year)
-  const lastYear = Math.max(...years)
+  const lastYear = Math.max(...years, 0)
 
-  const basePredictions = predictTrends(values, horizon)
+  const mlPredictions = ensemblePredict(values, horizon, lastYear)
 
-  return basePredictions.map((pred, idx) => {
+  return mlPredictions.map((pred, idx) => {
     const targetYear = lastYear + idx + 1
     const isArabica = data[0]?.crop.toLowerCase().includes('arábica')
     const biennialFactor = isArabica ? (targetYear % 2 === 0 ? 1.15 : 0.85) : 1.0
     const adjustedValue = pred.predictedValue * biennialFactor
 
     return {
-      ...pred,
       targetYear,
       predictedValue: adjustedValue,
+      lowerBound: pred.lowerBound * biennialFactor,
+      upperBound: pred.upperBound * biennialFactor,
+      growthRate: pred.growthRate,
+      confidenceScore: pred.confidenceScore,
       equations: [
-        ...pred.equations,
+        ...pred.models.slice(0, 2),
         `B_f = ${biennialFactor.toFixed(2)} (Ajuste Safra ${targetYear % 2 === 0 ? 'Alta' : 'Baixa'})`,
-        `Ŷ_adj = Ŷ * B_f`,
+        `Ŷ_adj = Ŷ × B_f`,
       ],
     }
   })
 }
 
 export const calculateEfficiencyMatrix = (data: ConabRecord[]): EfficiencyEntry[] => {
-  const latestYear = 2026
+  const latestYear = Math.max(...data.map(d => d.year), 0)
   const currentData = data.filter(d => d.year === latestYear)
-  const avgNationalProd = currentData.reduce((acc, curr) => acc + curr.productivity, 0) / currentData.length
+  const avgNationalProd = currentData.reduce((acc, curr) => acc + curr.productivity, 0) / (currentData.length || 1)
 
   return currentData
     .map(d => {

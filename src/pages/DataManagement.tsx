@@ -235,20 +235,20 @@ export default function DataManagement() {
                     <Card className="border-dashed">
                       <CardHeader className="pb-2">
                         <CardTitle className="text-sm flex items-center gap-2 text-primary">
-                          <CheckCircle2 className="h-4 w-4" /> Regr
+                          <CheckCircle2 className="h-4 w-4" /> Regras de Validação
                         </CardTitle>
                       </CardHeader>
                       <CardContent className="text-xs space-y-2">
                         <div className="flex justify-between"><span>Valores Negativos</span> <Badge variant="outline" className="text-green-600">Zero Ocorrências</Badge></div>
                         <div className="flex justify-between"><span>Unidades (kg/ha)</span> <Badge variant="outline" className="text-green-600">Normalizado</Badge></div>
-                        <div className="flex justify-between"><span>Fronteir</span> <Badge variant="outline" className="text-green-600">Válido</Badge></div>
+                        <div className="flex justify-between"><span>Fronteiras de Confiança</span> <Badge variant="outline" className="text-green-600">Válido</Badge></div>
                       </CardContent>
                     </Card>
 
                     <Card className="border-dashed">
                       <CardHeader className="pb-2">
                         <CardTitle className="text-sm flex items-center gap-2 text-amber-500">
-                          <AlertTriangle className="h-4 w-4" /> Anomali
+                          <AlertTriangle className="h-4 w-4" /> Anomalias Detectadas
                         </CardTitle>
                       </CardHeader>
                       <CardContent className="text-xs space-y-2">

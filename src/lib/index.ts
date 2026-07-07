@@ -13,21 +13,31 @@ export const calculateProductivity = (production: number, area: number): number 
   return (production * 60) / area
 }
 
-export const predictTrends = (historicalData: number[], periods: number = 1): Prediction[] => {
+export const predictTrends = (historicalData: number[], periods: number = 1, baseYear: number = new Date().getFullYear()): Prediction[] => {
   if (historicalData.length < 2) return []
 
   const n = historicalData.length
-  let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0
+  let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0, sumYY = 0
 
   for (let i = 0; i < n; i++) {
     sumX += i
     sumY += historicalData[i]
     sumXY += i * historicalData[i]
     sumXX += i * i
+    sumYY += historicalData[i] ** 2
   }
 
   const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX)
   const intercept = (sumY - slope * sumX) / n
+
+  const meanY = sumY / n
+  let ssRes = 0, ssTot = 0
+  for (let i = 0; i < n; i++) {
+    const yHat = slope * i + intercept
+    ssRes += (historicalData[i] - yHat) ** 2
+    ssTot += (historicalData[i] - meanY) ** 2
+  }
+  const rSquared = ssTot > 0 ? 1 - ssRes / ssTot : 0
 
   const predictions: Prediction[] = []
   const lastValue = historicalData[n - 1]
@@ -36,17 +46,19 @@ export const predictTrends = (historicalData: number[], periods: number = 1): Pr
     const x = n + i - 1
     const predictedValue = slope * x + intercept
     const growthRate = lastValue !== 0 ? ((predictedValue - lastValue) / lastValue) * 100 : 0
+    const horizonDecay = Math.max(0, 1 - (i - 1) * 0.12)
+    const confidence = Math.round(Math.min(rSquared * horizonDecay, 0.99) * 1000) / 1000
 
     predictions.push({
-      targetYear: 2026 + i,
+      targetYear: baseYear + i,
       predictedValue: Math.max(0, predictedValue),
-      lowerBound: Math.max(0, predictedValue * 0.92),
-      upperBound: predictedValue * 1.08,
+      lowerBound: Math.max(0, predictedValue * (1 - (1 - rSquared) * 0.5)),
+      upperBound: predictedValue * (1 + (1 - rSquared) * 0.5),
       growthRate,
-      confidenceScore: 0.85 - i * 0.05,
+      confidenceScore: confidence,
       equations: [
         `ŷ = ${intercept.toFixed(4)} + ${slope.toFixed(4)}x`,
-        `R² = ${(0.75 + Math.random() * 0.15).toFixed(4)}`,
+        `R² = ${rSquared.toFixed(4)}`,
       ],
     })
   }

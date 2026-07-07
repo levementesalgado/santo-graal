@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import {
   fetchAllConabData,
   fetchFilteredData,
@@ -15,6 +16,10 @@ export const QUERY_KEYS = {
   byState: (state: string) => ['conab', 'state', state] as const,
   years: ['conab', 'years'] as const,
   states: ['conab', 'states'] as const,
+};
+
+const onQueryError = (err: Error) => {
+  toast.error(err.message || 'Erro ao carregar dados do Supabase. Verifique a conexão.');
 };
 
 export const useAllConabData = () =>

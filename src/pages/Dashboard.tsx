@@ -27,9 +27,11 @@ const Dashboard = () => {
     const avgProductivity = activeData.length > 0 ? activeData.reduce((acc: number, curr: ConabRecord) => acc + curr.productivity, 0) / activeData.length : 0;
     const totalArea = activeData.reduce((acc: number, curr: ConabRecord) => acc + curr.area, 0);
     const stateTotals = activeData.reduce((acc: Record<string, number>, curr: ConabRecord) => { acc[curr.state] = (acc[curr.state] || 0) + curr.production; return acc; }, {} as Record<string, number>);
-    const leader = Object.entries(stateTotals).sort((a, b) => b[1] - a[1])[0]?.[0] || 'N/A';
+    const leaderEntry = Object.entries(stateTotals).sort((a, b) => b[1] - a[1])[0];
+    const leader = leaderEntry?.[0] || 'N/A';
+    const leaderValue = leaderEntry?.[1] || 0;
     const lastSync = activeData[0]?.timestamp ? new Date(activeData[0].timestamp).toLocaleString('pt-BR') : '—';
-    return { totalProduction, avgProductivity, totalArea, leader, lastSync };
+    return { totalProduction, avgProductivity, totalArea, leader, leaderValue, lastSync };
   }, [activeData]);
 
   return (
@@ -69,7 +71,7 @@ const Dashboard = () => {
             <MetricsCard metric="Produção Total" value={stats.totalProduction} unit="Mil Sacas" trend="up" subtitle="Volume consolidado no período selecionado" />
             <MetricsCard metric="Produtividade Média" value={stats.avgProductivity} unit="Kg/Ha" trend="stable" subtitle="Eficiência técnica por hectare plantado" />
             <MetricsCard metric="Área Total" value={stats.totalArea} unit="Mil Ha" trend="up" subtitle="Extensão territorial de cultivo ativo" />
-            <MetricsCard metric="Estado Líder" value={0} subtitle={`Principal polo: ${stats.leader}`} unit="Top Volume" />
+            <MetricsCard metric="Estado Líder" value={stats.leaderValue} subtitle={`Principal polo: ${stats.leader}`} unit="Top Volume" />
           </section>
 
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">

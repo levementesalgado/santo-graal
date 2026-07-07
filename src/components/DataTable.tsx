@@ -86,7 +86,12 @@ export function DataTable({ data, columns, filterable = true, exportable = true 
 
   const exportToCSV = () => {
     const headers = columns.map(c => COLUMN_LABELS[c] || c).join(",");
-    const rows = filteredData.map(item => columns.map(c => String(item[c as keyof ConabRecord])).join(",")).join("\n");
+    const rows = filteredData.map(item => columns.map(c => {
+      const val = String(item[c as keyof ConabRecord]);
+      return val.includes(',') || val.includes('"') || val.includes('\n')
+        ? `"${val.replace(/"/g, '""')}"`
+        : val;
+    }).join(",")).join("\n");
     const link = document.createElement("a");
     link.setAttribute("href", "data:text/csv;charset=utf-8," + encodeURI(headers + "\n" + rows));
     link.setAttribute("download", `conab_data_${new Date().toISOString().split('T')[0]}.csv`);

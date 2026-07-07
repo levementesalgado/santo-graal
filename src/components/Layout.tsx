@@ -150,7 +150,7 @@ export function Layout({ children }: LayoutProps) {
             </div>
           </div>
           <div className="mt-8 pt-8 border-t border-border flex flex-col sm:flex-row justify-between items-center gap-4">
-            <span className="text-xs text-muted-foreground font-medium">© 2026 AgroPrecision CONAB Intelligence. Todos os direitos reservados.</span>
+            <span className="text-xs text-muted-foreground font-medium">© {new Date().getFullYear()} AgroPrecision CONAB Intelligence. Todos os direitos reservados.</span>
             <div className="flex items-center gap-6 text-xs text-muted-foreground">
               <a href="#" className="hover:text-primary transition-colors">Termos de Uso</a>
               <a href="#" className="hover:text-primary transition-colors">API Documentation</a>

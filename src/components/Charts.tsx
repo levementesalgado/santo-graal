@@ -198,7 +198,9 @@ interface RegionalBarChartProps {
   selectedYear?: number;
 }
 
-export function RegionalBarChart({ data, selectedYear = 2026 }: RegionalBarChartProps) {
+export function RegionalBarChart({ data, selectedYear: propYear }: RegionalBarChartProps) {
+  const dataYears = useMemo(() => data.map(d => d.year), [data]);
+  const selectedYear = propYear ?? Math.max(...dataYears, 0);
   const chartData = useMemo(() => {
     return data
       .filter(d => d.year === selectedYear)
@@ -246,8 +248,9 @@ interface ProductivityScatterProps {
 }
 
 export function ProductivityScatter({ data }: ProductivityScatterProps) {
+  const scatterYear = useMemo(() => Math.max(...data.map(d => d.year), 0), [data]);
   const chartData = useMemo(() => {
-    return data.filter(d => d.year === 2026).map(d => ({
+    return data.filter(d => d.year === scatterYear).map(d => ({
       x: d.area,
       y: d.productivity,
       z: d.production,
@@ -259,7 +262,7 @@ export function ProductivityScatter({ data }: ProductivityScatterProps) {
   return (
     <Card className="w-full h-full bg-card/50 border-border/50">
       <CardHeader>
-        <CardTitle className="text-lg">Matriz Área x Produtividade (2026)</CardTitle>
+        <CardTitle className="text-lg">Matriz Área x Produtividade ({scatterYear})</CardTitle>
         <CardDescription>Tamanho da bolha representa produção total</CardDescription>
       </CardHeader>
       <CardContent className="h-[350px] w-full pt-4">
@@ -310,7 +313,8 @@ interface PredictionChartProps {
   showPredictions?: boolean;
 }
 
-export function PredictionChart({ data, selectedState = 'MG' }: PredictionChartProps) {
+export function PredictionChart({ data, selectedState = 'MG', showPredictions = true }: PredictionChartProps) {
+  if (!showPredictions) return null;
   const stateData = useMemo(() => data.filter(d => d.state === selectedState), [data, selectedState]);
   const predictions = useMemo(() => runPredictiveModel(stateData, 4), [stateData]);
 

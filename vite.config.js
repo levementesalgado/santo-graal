@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react-swc';
+import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import fs from 'node:fs/promises';
 import nodePath from 'node:path';
@@ -104,7 +104,7 @@ function cdnPrefixImages() {
 
 export default defineConfig(({ mode }) => {
   return {
-    base: '/santo-graal/',
+    base: '/',
     server: {
       host: '::',
       port: 8080,
@@ -117,8 +117,6 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './src'),
-        'react-router-dom': path.resolve(__dirname, './src/lib/react-router-dom-proxy.jsx'),
-        'react-router-dom-original': 'react-router-dom',
       },
     },
     define: {

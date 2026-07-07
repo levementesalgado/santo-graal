@@ -24,6 +24,10 @@ const Analytics = () => {
   const regionalRecommendations: string[] = useMemo(() => generateRegionalRecommendations(selectedState, allData), [selectedState, allData]);
   const totalNationalProduction = useMemo(() => latestData.reduce((acc: number, curr: ConabRecord) => acc + curr.production, 0), [latestData]);
   const avgNationalProductivity = useMemo(() => latestData.length > 0 ? latestData.reduce((acc: number, curr: ConabRecord) => acc + curr.productivity, 0) / latestData.length : 0, [latestData]);
+  const avgConfidence = useMemo(() => {
+    if (predictions.length === 0) return 85.4;
+    return predictions.reduce((sum, p) => sum + p.confidenceScore, 0) / predictions.length * 100;
+  }, [predictions]);
 
   if (isLoading) return (
     <div className="flex items-center justify-center gap-3 py-24 text-muted-foreground">
@@ -56,7 +60,7 @@ const Analytics = () => {
         <MetricsCard metric="Produção Estimada" value={totalNationalProduction} unit="mil sacas" trend={seasonalAnalysis.trendDirection === 'Crescente' ? 'up' : 'down'} subtitle={`Volume total nacional em ${latestYear}`} />
         <MetricsCard metric="Produtividade Média" value={avgNationalProductivity} unit="kg/ha" trend="stable" subtitle="Benchmark de eficiência nacional" />
         <MetricsCard metric="Volatilidade Ciclo" value={seasonalAnalysis.volatility} unit="%" trend={seasonalAnalysis.isCyclic ? 'up' : 'down'} subtitle="Índice de variação interanual" />
-        <MetricsCard metric="Score de Confiança" value={85.4} unit="%" trend="up" subtitle="Acurácia do modelo preditivo" />
+        <MetricsCard metric="Score de Confiança" value={avgConfidence} unit="%" trend="up" subtitle="Acurácia do modelo preditivo" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">

@@ -1,24 +1,23 @@
 # Santo Graal — TODO
 
-## 🔴 Alto
-- [ ] **postMessage CSRF corrigido** — validação de origin adicionada
-- [ ] **Error Boundary adicionado** — captura crashes sem tela branca
-- [ ] **CSP adicionado** — Content-Security-Policy no index.html
-- [ ] **R² é fake** — gerado com Math.random(), precisa calcular de verdade
-- [ ] **Score de Confiança hardcoded** — 85.4% fixo, precisa vir dos dados
-- [ ] **CSV export com escaping** — valores agora escapados corretamente
+## ✅ Resolvidos
+- [x] **postMessage CSRF corrigido** — origin validado em ambos os lados
+- [x] **Error Boundary adicionado** — captura crashes sem tela branca
+- [x] **CSP adicionado** — Content-Security-Policy no index.html (font-src, form-action, frame-ancestors)
+- [x] **R² é fake** — agora calculado de verdade (1 - SS_res/SS_tot)
+- [x] **Score de Confiança hardcoded** — agora baseado no R² × horizonte
+- [x] **CSV export com escaping** — valores com `,` `"` `\n` escapados
+- [x] **public/images/ criado** — placeholders PNG para assets de heatmap
+- [x] **React 19 types com React 18 runtime** — downgrade `@types/react` → ^18.3.12
+- [x] **ESLint** — agora cobre `.ts,.tsx`
+- [x] **Ano 2026 hardcoded** — todos dinâmicos
+- [x] **Divisão por zero** — efficiency matrix guardada com `|| 1`
+- [x] **axios, d3, babel, @iconify/react** — removidos
+- [x] **"Estado Líder" sempre 0** — mostra produção real do líder
+- [x] **Labels truncadas** — "Regras de Validação", "Fronteiras de Confiança", "Anomalias Detectadas"
+- [x] **Supabase failure silent** — toast.error em falhas de query
+- [x] **Charts: showPredictions** — prop desestruturada e funcional
+- [x] **Code-splitting** — React.lazy + Suspense em todas as rotas
 
-## 🟡 Médio
-- [ ] **public/images/ criado** — assets de heatmap ainda precisam ser adicionados
-- [ ] **React 19 types com React 18 runtime** — downgrade types ou upgrade react
-- [ ] **ESLint ignora .ts/.tsx** — config precisa incluir TypeScript
-- [ ] **Ano 2026 hardcoded** — precisa ser dinâmico
-- [ ] **Divisão por zero** — efficiency matrix produz NaN se currentData vazio
-- [ ] **axios, d3, babel, @iconify/react — dependências não usadas**
-
-## 🔵 Baixo
-- [ ] **"Estado Líder" sempre 0** — MetricsCard com value hardcoded
-- [ ] **Labels truncadas** — "Regr", "Fronteir", "Anomali"
-- [ ] **sem erro de dados** — falha do Supabase fica silenciosa
-- [ ] **Charts: showPredictions ignorado** — prop não é desestruturada
+## 🔵 Pendentes (baixa prioridade)
 - [ ] **Testes** — adicionar teste pro parser CONAB

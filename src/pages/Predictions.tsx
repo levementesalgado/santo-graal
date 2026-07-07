@@ -67,7 +67,7 @@ export default function Predictions() {
   const lastPrediction = predictions[predictions.length - 1];
   const firstPrediction = predictions[0];
 
-  const latestYear = useMemo(() => Math.max(...allData.map((d: ConabRecord) => d.year), 2026), [allData]);
+  const latestYear = useMemo(() => Math.max(...allData.map((d: ConabRecord) => d.year), 0), [allData]);
 
   if (isLoading) {
     return (
